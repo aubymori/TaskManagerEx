@@ -386,10 +386,10 @@ void COptions::SetDefaultValues()
     m_rcWindow.bottom  = 10 + g_minHeight;
     m_rcWindow.right   = 10 + g_minWidth;
 
-    m_bShowAllProcess = (g_fIsTSEnabled && !g_fIsSingleUserTS && IsUserAdmin());
+    m_bShowAllProcess = (g_fIsTSEnabled && IsUserAdmin());
     m_bShutdownMenu = TRUE;
 
-    const COLUMNID *pcol = (g_fIsTSEnabled && !g_fIsSingleUserTS) ? g_aTSCols : g_aDefaultCols;
+    const COLUMNID *pcol = (g_fIsTSEnabled) ? g_aTSCols : g_aDefaultCols;
 
     for (int i = 0; i < NUM_COLUMN + 1 ; i++, pcol++)
     {
@@ -3059,7 +3059,7 @@ int WINAPI wWinMain(
            goto cleanup;
         }
 
-        if (g_fIsTSEnabled && !g_fIsSingleUserTS)
+        if (g_fIsTSEnabled)
         {
             g_pPages[4] = new CUserPage;
             if (NULL == g_pPages[4])
