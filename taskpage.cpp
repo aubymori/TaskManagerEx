@@ -1606,7 +1606,7 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
         m_hSmallIcon = NULL;
         m_hLargeIcon = NULL;
 
-        if (!SendMessageTimeout(hwnd, WM_GETICON, 0, 0, 
+        if (!SendMessageTimeout(hwnd, WM_GETICON, 2, 0, 
                 SMTO_BLOCK | SMTO_ABORTIFHUNG, ICON_FETCH_TIMEOUT, (PULONG_PTR) &m_hSmallIcon)
             || NULL == m_hSmallIcon)
         {
