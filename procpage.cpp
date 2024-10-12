@@ -3305,8 +3305,19 @@ INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
                 GetWindowRect( hwnd, &rc );
                 MapWindowPoints(HWND_DESKTOP, hwndDlg, (LPPOINT) &rc, 2);
                 SetWindowPos( hwnd, NULL, rc.left, rcCPU0.top + delta, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
-
+                
                 GetClientRect( hwndDlg, &rc );
+                AdjustWindowRectEx(
+                    &rc,
+                    GetWindowLongPtrW(hwndDlg, GWL_STYLE),
+                    FALSE,
+                    GetWindowLongPtrW(hwndDlg, GWL_EXSTYLE)
+                );
+
+                // AdjustWindowRectEx doesn't account for this
+                rc.right += 2 * GetSystemMetrics(SM_CXPADDEDBORDER);
+                rc.bottom += 2 * GetSystemMetrics(SM_CXPADDEDBORDER);
+
                 SetWindowPos( hwndDlg, NULL, 0, 0, rc.right, rc.bottom + delta + g_ControlHeightSpacing, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE );
             }
 
