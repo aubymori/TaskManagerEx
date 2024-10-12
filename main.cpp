@@ -387,6 +387,7 @@ void COptions::SetDefaultValues()
     m_rcWindow.right   = 10 + g_minWidth;
 
     m_bShowAllProcess = (g_fIsTSEnabled && !g_fIsSingleUserTS && IsUserAdmin());
+    m_bShutdownMenu = TRUE;
 
     const COLUMNID *pcol = (g_fIsTSEnabled && !g_fIsSingleUserTS) ? g_aTSCols : g_aDefaultCols;
 
@@ -537,6 +538,7 @@ void UpdateMenuStates()
 
         CheckMenuItem(hMenu, IDM_ALWAYSONTOP,       MF_BYCOMMAND | (g_Options.m_fAlwaysOnTop   ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_MINIMIZEONUSE,     MF_BYCOMMAND | (g_Options.m_fMinimizeOnUse ? MF_CHECKED : MF_UNCHECKED));
+        CheckMenuItem(hMenu, IDM_SHOWSHUTDOWN,      MF_BYCOMMAND | (g_Options.m_bShutdownMenu  ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_KERNELTIMES,       MF_BYCOMMAND | (g_Options.m_fKernelTimes   ? MF_CHECKED : MF_UNCHECKED));    
         CheckMenuItem(hMenu, IDM_NOTITLE,           MF_BYCOMMAND | (g_Options.m_fNoTitle       ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_HIDEWHENMIN,       MF_BYCOMMAND | (g_Options.m_fHideWhenMin   ? MF_CHECKED : MF_UNCHECKED));
@@ -1376,7 +1378,7 @@ void    LoadEjectFunction (void)
 void AdjustMenuBar (HMENU hMenu)
 
 {
-    if( !IsOS(OS_WELCOMELOGONUI))
+    if (!g_Options.m_bShutdownMenu)
     {
         //
         //  Classic GINA UI - Find the "shutdown" menu and remove it.
@@ -2020,6 +2022,11 @@ void MainWnd_OnCommand(HWND hwnd, int id)
 
     case IDM_MINIMIZEONUSE:
         g_Options.m_fMinimizeOnUse = !g_Options.m_fMinimizeOnUse;
+        UpdateMenuStates();
+        break;
+
+    case IDM_SHOWSHUTDOWN:
+        g_Options.m_bShutdownMenu = !g_Options.m_bShutdownMenu;
         UpdateMenuStates();
         break;
 

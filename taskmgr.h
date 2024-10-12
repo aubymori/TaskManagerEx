@@ -77,7 +77,8 @@ typedef enum COLUMNID
     COL_OTHEROPERCOUNT      = 21,
     COL_READXFERCOUNT       = 22,
     COL_WRITEXFERCOUNT      = 23,
-    COL_OTHERXFERCOUNT      = 24
+    COL_OTHERXFERCOUNT      = 24,
+    COL_COMMANDLINE         = 25
 };
 
 typedef enum NETCOLUMNID
@@ -110,7 +111,7 @@ typedef enum NETCOLUMNID
     COL_NONUNICASTSTOTALPERINTER    = 25
 };
 
-#define MAX_COLUMN      24
+#define MAX_COLUMN      25
 #define NUM_COLUMN      (MAX_COLUMN + 1)
 #define NUM_NETCOLUMN   26
 
@@ -219,6 +220,7 @@ public:
     BOOL        bUnused;
     BOOL        bUnused2;
     BOOL        m_bShowAllProcess;
+    BOOL        m_bShutdownMenu;
 
     HRESULT     Load();
     HRESULT     Save();

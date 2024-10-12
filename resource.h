@@ -179,6 +179,7 @@
 #define IDC_READXFERCOUNT               2035
 #define IDC_WRITEXFERCOUNT              2036
 #define IDC_OTHERXFERCOUNT              2037
+#define IDC_COMMANDLINE                 2038
 
 #define IDR_MAINMENU_NET                2400
 #define IDM_BYTESSENT                   2401
@@ -334,9 +335,10 @@
 #define IDS_COL_READXFERCOUNT           21008
 #define IDS_COL_WRITEXFERCOUNT          21009
 #define IDS_COL_OTHERXFERCOUNT          21010
-#define IDS_G                           21011
-#define IDS_M                           21012
-#define IDS_ZERO                        21013
+#define IDS_COL_COMMANDLINE             21011
+#define IDS_G                           21012
+#define IDS_M                           21013
+#define IDS_ZERO                        21014
 #define IDS_BITSPERSEC                  21015
 #define IDS_SCALEFONT                   21016
 #define IDS_PERCENT                     21017
@@ -441,6 +443,7 @@
 #define IDM_HIDE                        40063
 #define IDM_RESTORETASKMAN              40064
 #define IDM_HIDEWHENMIN                 40065
+#define IDM_SHOWSHUTDOWN                40066
 #define IDM_TRAYMENU                    40069
 #define IDM_SHOW16BIT                   40098
 #define IDM_NOTITLE                     40099

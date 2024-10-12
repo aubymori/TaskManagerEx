@@ -259,6 +259,8 @@ BEGIN
                     WS_TABSTOP,103,136,87,10
     CONTROL         "I/O Other Bytes",IDC_OTHERXFERCOUNT,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,103,147,87,10
+    CONTROL         "Command Line",IDC_COMMANDLINE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,103,158,87,10
 END
 
 
@@ -443,6 +445,7 @@ BEGIN
         MENUITEM "&Always On Top",              IDM_ALWAYSONTOP
         MENUITEM "&Minimize On Use",            IDM_MINIMIZEONUSE, CHECKED
         MENUITEM "&Hide When Minimized",        IDM_HIDEWHENMIN, CHECKED
+        MENUITEM "&Shut Down Menu",             IDM_SHOWSHUTDOWN, CHECKED
     END
     POPUP "&View"
     BEGIN
@@ -541,6 +544,7 @@ BEGIN
         MENUITEM "&Always On Top",              IDM_ALWAYSONTOP
         MENUITEM "&Minimize On Use",            IDM_MINIMIZEONUSE, CHECKED
         MENUITEM "&Hide When Minimized",        IDM_HIDEWHENMIN, CHECKED
+        MENUITEM "&Shut Down Menu",             IDM_SHOWSHUTDOWN, CHECKED
     END
     POPUP "&View"
     BEGIN
@@ -582,7 +586,7 @@ BEGIN
         MENUITEM "&Always On Top",              IDM_ALWAYSONTOP
         MENUITEM "&Minimize On Use",            IDM_MINIMIZEONUSE, CHECKED
         MENUITEM "&Hide When Minimized",        IDM_HIDEWHENMIN, CHECKED
-        MENUITEM "&Show 16-bit tasks",          IDM_SHOW16BIT, CHECKED
+        MENUITEM "&Shut Down Menu",             IDM_SHOWSHUTDOWN, CHECKED
     END
     POPUP "&View"
     BEGIN
@@ -630,6 +634,7 @@ BEGIN
         MENUITEM "&Always On Top",              IDM_ALWAYSONTOP
         MENUITEM "&Minimize On Use",            IDM_MINIMIZEONUSE, CHECKED
         MENUITEM "&Hide When Minimized",        IDM_HIDEWHENMIN, CHECKED
+        MENUITEM "&Shut Down Menu",             IDM_SHOWSHUTDOWN, CHECKED
         MENUITEM SEPARATOR
         MENUITEM "&Show Full Account Name",     IDM_SHOWDOMAINNAMES
     END
@@ -694,6 +699,7 @@ BEGIN
         MENUITEM "&Always On Top",              IDM_ALWAYSONTOP
         MENUITEM "&Minimize On Use",            IDM_MINIMIZEONUSE,   CHECKED
         MENUITEM "&Hide When Minimized",        IDM_HIDEWHENMIN,     CHECKED
+        MENUITEM "&Shut Down Menu",             IDM_SHOWSHUTDOWN, CHECKED
         MENUITEM SEPARATOR
         MENUITEM "&Tab Always Active",          IDM_TABALWAYSACTIVE, CHECKED
         MENUITEM "Show &Cumulative Data",       IDM_SHOWALLDATA,     CHECKED
@@ -1035,6 +1041,7 @@ BEGIN
     IDS_COL_READXFERCOUNT   "I/O Read Bytes"
     IDS_COL_WRITEXFERCOUNT  "I/O Write Bytes"
     IDS_COL_OTHERXFERCOUNT  "I/O Other Bytes"
+    IDS_COL_COMMANDLINE     "Command Line"
 END
 
 STRINGTABLE DISCARDABLE 

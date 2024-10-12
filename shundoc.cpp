@@ -95,6 +95,14 @@ VOID (NTAPI *RtlTimeToElapsedTimeFields)(
 
 NTSTATUS (NTAPI *RtlGetVersion)(PRTL_OSVERSIONINFOW lpVersionInformation) = nullptr;
 
+NTSTATUS (NTAPI *NtQueryInformationProcess)(
+    IN HANDLE ProcessHandle,
+    IN PROCESSINFOCLASS ProcessInformationClass,
+    OUT PVOID ProcessInformation,
+    IN ULONG ProcessInformationLength,
+    OUT PULONG ReturnLength OPTIONAL
+);
+
 BOOL (WINAPI *EndTask)(HWND hWnd, BOOL fShutDown, BOOL fForce) = nullptr;
 
 //
@@ -135,6 +143,7 @@ bool SHUndocInit(void)
 	LOAD_FUNCTION(ntdll, NtClose);
 	LOAD_FUNCTION(ntdll, RtlTimeToElapsedTimeFields);
 	LOAD_FUNCTION(ntdll, RtlGetVersion);
+	LOAD_FUNCTION(ntdll, NtQueryInformationProcess);
 
 	LOAD_MODULE(winsta);
 	LOAD_FUNCTION(winsta, WinStationGetProcessSid);

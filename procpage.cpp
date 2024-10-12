@@ -91,7 +91,8 @@ const int g_aDlgColIDs[] =
     IDC_OTHEROPERCOUNT,
     IDC_READXFERCOUNT,
     IDC_WRITEXFERCOUNT,
-    IDC_OTHERXFERCOUNT
+    IDC_OTHERXFERCOUNT,
+    IDC_COMMANDLINE
 };
 
 //
@@ -136,7 +137,8 @@ struct
     { LVCFMT_RIGHT,      70 },       // COL_OTHEROPERCOUNT
     { LVCFMT_RIGHT,      70 },       // COL_READXFERCOUNT
     { LVCFMT_RIGHT,      70 },       // COL_WRITEXFERCOUNT
-    { LVCFMT_RIGHT,      70 }        // COL_OTHERXFERCOUNT
+    { LVCFMT_RIGHT,      70 },       // COL_OTHERXFERCOUNT
+    { LVCFMT_LEFT,     0x6B }        // COL_COMMANDLINE
 };
 
 
@@ -187,6 +189,7 @@ public:
     LONGLONG          m_IoWriteXferCount;
     LONGLONG          m_IoOtherXferCount;
     LPWSTR            m_pszImageName;
+    LPWSTR            m_pszCommandLine;
     CProcInfo *       m_pWowParentProcInfo;    // non-NULL for WOW tasks
     WORD              m_htaskWow;              // non-zero for WOW tasks
     BOOL              m_fWowProcess:1;         // TRUE for real WOW process
@@ -231,6 +234,7 @@ public:
             DWORD            m_fDirty_COL_READXFERCOUNT  :1;
             DWORD            m_fDirty_COL_WRITEXFERCOUNT :1;
             DWORD            m_fDirty_COL_OTHERXFERCOUNT :1;
+            DWORD            m_fDirty_COL_COMMANDLINE    :1;
         };
 #pragma warning(default:4201)       // Nameless struct or union
     };
@@ -268,6 +272,11 @@ public:
         if( m_pszUserName != NULL )
         {
             LocalFree( m_pszUserName );
+        }
+
+        if (m_pszCommandLine)
+        {
+            LocalFree(m_pszCommandLine);
         }
     }
 
@@ -618,7 +627,8 @@ static const int _aIDColNames[NUM_COLUMN] =
     IDS_COL_OTHEROPERCOUNT,
     IDS_COL_READXFERCOUNT,
     IDS_COL_WRITEXFERCOUNT,
-    IDS_COL_OTHERXFERCOUNT
+    IDS_COL_OTHERXFERCOUNT,
+    IDS_COL_COMMANDLINE
 };
 
 HRESULT CProcPage::SetupColumns()
@@ -907,6 +917,10 @@ INT CProcInfo::Compare(CProcInfo * pOther)
 
         case COL_OTHERXFERCOUNT:
             iRet = Compare64(pMyThis->m_IoOtherXferCount, pMyOther->m_IoOtherXferCount);
+            break;
+
+        case COL_COMMANDLINE:
+            iRet = lstrcmpi(pMyThis->m_pszCommandLine, pMyOther->m_pszCommandLine);
             break;
 
         default:
@@ -1911,6 +1925,36 @@ HRESULT CProcInfo::SetData(__int64                TotalTime,
         if( g_fIsTSEnabled )
         {
             SetProcessUsername(LPFILETIME(&(pInfo->CreateTime)));
+        }
+
+        m_fDirty_COL_COMMANDLINE = TRUE;
+        HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, m_UniqueProcessId);
+        if (hProcess)
+        {
+            PROCESS_BASIC_INFORMATION pbi;
+            if (NT_SUCCESS(NtQueryInformationProcess(hProcess, ProcessBasicInformation, &pbi, sizeof(pbi), nullptr)))
+            {
+                PRTL_USER_PROCESS_PARAMETERS params = nullptr;
+                if (ReadProcessMemory(hProcess, &pbi.PebBaseAddress->ProcessParameters, &params, sizeof(params), nullptr))
+                {
+                    UNICODE_STRING temp;
+                    if (ReadProcessMemory(hProcess, &params->CommandLine, &temp, sizeof(UNICODE_STRING), nullptr))
+                    {
+                        m_pszCommandLine = (LPWSTR)LocalAlloc(LPTR, temp.Length * sizeof(WCHAR));
+                        if (!ReadProcessMemory(hProcess, temp.Buffer, m_pszCommandLine, temp.Length * sizeof(WCHAR), nullptr))
+                        {
+                            LocalFree(m_pszCommandLine);
+                            m_pszCommandLine = nullptr;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (!m_pszCommandLine)
+        {
+            m_pszCommandLine = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR));
+            *m_pszCommandLine = L'\0';
         }
     }
 
@@ -2978,6 +3022,11 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
 
                 case COL_OTHERXFERCOUNT:
                     Int64ToCommaSepString(pProcInfo->m_IoOtherXferCount, plvitem->pszText, plvitem->cchTextMax);
+                    break;
+
+                case COL_COMMANDLINE:
+                    //  don't care if it truncates - UI only
+                    StringCchCopy(plvitem->pszText, plvitem->cchTextMax, pProcInfo->m_pszCommandLine);
                     break;
 
                 default:
