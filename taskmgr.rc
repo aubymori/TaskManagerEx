@@ -859,6 +859,7 @@ BEGIN
     IDM_BRINGTOFONT         "Brings a task to the front, but does not switch focus to that task"
     IDM_ALWAYSONTOP         "Task Manager remains in front of all other windows unless minimized"
     IDM_MINIMIZEONUSE       "Task Manager is minimized when a SwitchTo operation is performed"
+    IDM_SHOWSHUTDOWN        "Show ""Shut Down"" in the menu bar"
     IDM_MINIMIZE            "Minimizes the selected windows tasks"
     IDM_MAXIMIZE            "Maximizes the windows to the size of the desktop"
     IDM_RESTORE             "Restores the selected windows to their default state"
