@@ -419,6 +419,7 @@
 #define IDM_PROC_BELOWNORMAL            40033
 #define IDM_PROC_LOW                    40034
 #define IDM_PROC_FILELOCATION           40035
+#define IDM_PROC_PROPERTIES             40036
 
 #define IDM_NEWDESKTOP                  40038
 #define IDM_TASK_MINIMIZE               40039

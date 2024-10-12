@@ -3858,10 +3858,10 @@ void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
     case IDM_PROC_FILELOCATION:
         if (pProc)
         {
-            WCHAR pszName[MAX_PATH];
             HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pProc->m_UniqueProcessId);
             if (hProcess)
             {
+                WCHAR pszName[MAX_PATH];
                 DWORD cchNameMax = MAX_PATH;
                 if (QueryFullProcessImageNameW(hProcess, NULL, pszName, &cchNameMax))
                 {
@@ -3871,6 +3871,28 @@ void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
                         SHOpenFolderAndSelectItems(pidl, 0, nullptr, NULL);
                         CoTaskMemFree(pidl);
                     }
+                }
+                CloseHandle(hProcess);
+            }
+        }
+        break;
+    case IDM_PROC_PROPERTIES:
+        if (pProc)
+        {
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pProc->m_UniqueProcessId);
+            if (hProcess)
+            {
+                WCHAR pszName[MAX_PATH];
+                DWORD cchNameMax = MAX_PATH;
+                if (QueryFullProcessImageNameW(hProcess, NULL, pszName, &cchNameMax))
+                {
+                    SHELLEXECUTEINFOW sei = { 0 };
+                    sei.cbSize = sizeof(sei);
+                    sei.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_INVOKEIDLIST;
+                    sei.lpVerb = L"properties";
+                    sei.lpFile = pszName;
+                    sei.hwnd = g_hMainWnd;
+                    ShellExecuteExW(&sei);
                 }
                 CloseHandle(hProcess);
             }

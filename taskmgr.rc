@@ -500,6 +500,8 @@ BEGIN
             MENUITEM "&Low",                        IDM_PROC_LOW
         END
         MENUITEM "Set &Affinity...",            IDM_AFFINITY
+        MENUITEM SEPARATOR
+        MENUITEM "P&roperties",                 IDM_PROC_PROPERTIES
     END
 END
 
