@@ -71,6 +71,7 @@ typedef short CSHORT;
 #include <security.h>
 #include <powerbase.h>
 #include <ntstatus.h>
+#include <dwmapi.h>
 //#include <ntdef.h>
 #include "rtlmir.h"
 #include "shundoc.h"

@@ -1619,7 +1619,7 @@ HRESULT CTaskInfo::SetData(HWND                         hwnd,
             m_hLargeIcon = (HICON) GetClassLongPtr(hwnd, GCLP_HICON);
         }
     }
-    
+
     return S_OK;
 }
 
@@ -1912,6 +1912,15 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
         return TRUE;
     }
 
+    BOOL bCloaked = FALSE;
+    DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED, &bCloaked, sizeof(bCloaked));
+    if (bCloaked)
+    {
+        // Immersive/UWP windows not shown to the user
+
+        return TRUE;
+    }
+        
     if (FALSE == InternalGetWindowText(hwnd, szTitle, ARRAYSIZE(szTitle)))
     {
         // Can't get the title - something weird going on.. but continue anyway

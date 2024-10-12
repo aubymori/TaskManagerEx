@@ -93,7 +93,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalManifestDependencies>"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'";%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
-      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -113,7 +113,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalManifestDependencies>"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'";%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
-      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -129,7 +129,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalManifestDependencies>"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'";%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
-      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -149,7 +149,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalManifestDependencies>"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'";%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
-      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wtsapi32.lib;shlwapi.lib;comctl32.lib;htmlhelp.lib;powrprof.lib;iphlpapi.lib;secur32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
