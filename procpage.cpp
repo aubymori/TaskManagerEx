@@ -1949,6 +1949,8 @@ HRESULT CProcInfo::SetData(__int64                TotalTime,
                     }
                 }
             }
+
+            CloseHandle(hProcess);
         }
         
         if (!m_pszCommandLine)
@@ -3853,7 +3855,27 @@ void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
             SetPriority( pProc, id);
         }
         break;
-
+    case IDM_PROC_FILELOCATION:
+        if (pProc)
+        {
+            WCHAR pszName[MAX_PATH];
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pProc->m_UniqueProcessId);
+            if (hProcess)
+            {
+                DWORD cchNameMax = MAX_PATH;
+                if (QueryFullProcessImageNameW(hProcess, NULL, pszName, &cchNameMax))
+                {
+                    LPITEMIDLIST pidl;
+                    if (SUCCEEDED(SHParseDisplayName(pszName, nullptr, &pidl, NULL, nullptr)))
+                    {
+                        SHOpenFolderAndSelectItems(pidl, 0, nullptr, NULL);
+                        CoTaskMemFree(pidl);
+                    }
+                }
+                CloseHandle(hProcess);
+            }
+        }
+        break;
     case IDC_SHOWALL:
         g_Options.m_bShowAllProcess = SendMessage( hCtrl , BM_GETCHECK , 0 , 0 ) == BST_CHECKED;
         break;

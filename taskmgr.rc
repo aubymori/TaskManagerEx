@@ -484,6 +484,8 @@ IDR_PROC_CONTEXT MENU DISCARDABLE
 BEGIN
     POPUP "Banana"
     BEGIN
+        MENUITEM "&Open File Location"          IDM_PROC_FILELOCATION
+        MENUITEM SEPARATOR
         MENUITEM "&End Process",                IDM_PROC_TERMINATE
         MENUITEM "End Process &Tree",           IDM_ENDTREE
         MENUITEM "&Debug",                      IDM_PROC_DEBUG
