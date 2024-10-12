@@ -381,7 +381,7 @@
 
 #define IDS_FMTTASKS                    30038
 #define IDS_FMTPROCS                    30039
-#define IDS_FMTMEMK                     30040
+#define IDS_FMTMEM                      30040
 #define IDS_FMTCPU                      30041
 #define IDM_TASK_TILEVERT               30043
 #define IDS_FMTMEMM                     30044

@@ -2379,7 +2379,7 @@ HRESULT CProcPage::UpdateProcInfoArray()
     SysInfoTemp.m_dwKernelNP    = PerfInfo.NonPagedPoolPages * (g_BasicInfo.PageSize / 1024);
     SysInfoTemp.m_dwKernelTotal = SysInfoTemp.m_dwKernelNP + SysInfoTemp.m_dwKernelPaged;
 
-    g_MEMMax = SysInfoTemp.m_dwCommitLimit;
+    g_MEMMax = SysInfoTemp.m_dwPhysicalMemory;
 
     Status = NtQuerySystemInformation(
                 SystemFileCacheInformation,

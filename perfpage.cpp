@@ -1666,20 +1666,7 @@ BYTE InitPerfInfo()
     // Get the maximum commit limit
     //
 
-    SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
-
-    Status = NtQuerySystemInformation(
-                SystemPerformanceInformation,
-                &PerfInfo,
-                sizeof(PerfInfo),
-                NULL);
-
-    if (!NT_SUCCESS(Status))
-    {
-        return 0;
-    }
-
-    g_MEMMax = PerfInfo.CommitLimit * ( g_PageSize / 1024 );
+    g_MEMMax = BasicInfo.NumberOfPhysicalPages * ( g_PageSize / 1024 );
 
     return(g_cProcessors);
 }
@@ -1881,7 +1868,7 @@ void CalcCpuTime(BOOL fUpdateHistory)
             return;
         }
 
-        g_MEMUsage = PerfInfo.CommittedPages * (g_PageSize / 1024);
+        g_MEMUsage = g_MEMMax - (PerfInfo.AvailablePages * (g_PageSize / 1024));
         MoveMemory((LPVOID) (g_pMEMHistory + 1),
                    (LPVOID) (g_pMEMHistory),
                    sizeof(BYTE) * (HIST_SIZE - 1) );

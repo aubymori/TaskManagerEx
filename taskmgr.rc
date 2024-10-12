@@ -119,9 +119,9 @@ BEGIN
     EDITTEXT        IDC_KERNEL_NONPAGED,182,201,57,8,ES_AUTOHSCROLL | ES_READONLY | ES_RIGHT | NOT WS_BORDER | NOT WS_TABSTOP
     CONTROL         "CPU Usage",IDC_STATIC,"DavesFrameClass",0x7,8,5,60,60,
                     WS_EX_NOPARENTNOTIFY
-    CONTROL         "PF Usage",IDC_MEMBARFRAME,"DavesFrameClass",0x7,8,67,
+    CONTROL         "Memory",IDC_MEMBARFRAME,"DavesFrameClass",0x7,8,67,
                     60,60,WS_EX_NOPARENTNOTIFY
-    CONTROL         "Page File Usage History",IDC_MEMFRAME,"DavesFrameClass",
+    CONTROL         "Physical Memory Usage History",IDC_MEMFRAME,"DavesFrameClass",
                     0x7,78,67,60,60,WS_EX_NOPARENTNOTIFY
     CONTROL         "Totals",IDC_STATIC13,"DavesFrameClass",0x7,8,129,113,39,
                     WS_EX_NOPARENTNOTIFY
@@ -1075,8 +1075,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_FMTTASKS            "Tasks: %d"
     IDS_FMTPROCS            "Processes: %d"
-    IDS_FMTMEMK             "Commit Charge: %I64dK / %I64dK"
-    IDS_FMTMEMM             "Commit Charge: %I64dM / %I64dM"
+    IDS_FMTMEM              "Physical Memory: %d%%"
+    IDS_FMTMEMM             "%I64d / %I64d"
     IDS_FMTCPU              "CPU Usage: %d%%"
     IDM_TASK_TILEVERT       "Tiles the windows vertically on the desktop"
 END

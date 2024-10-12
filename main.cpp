@@ -89,7 +89,7 @@ WCHAR       g_szRunning     [SHORTSTRLEN];
 WCHAR       g_szfmtTasks    [SHORTSTRLEN];
 WCHAR       g_szfmtProcs    [SHORTSTRLEN];
 WCHAR       g_szfmtCPU      [SHORTSTRLEN];  
-WCHAR       g_szfmtMEMK     [SHORTSTRLEN];  
+WCHAR       g_szfmtMEM     [SHORTSTRLEN];  
 WCHAR       g_szfmtMEMM     [SHORTSTRLEN];  
 WCHAR       g_szfmtCPUNum   [SHORTSTRLEN];
 WCHAR       g_szTotalCPU    [SHORTSTRLEN];
@@ -682,18 +682,7 @@ void UpdateStatusBar()
         StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtCPU, g_CPUUsage);
         SendMessage(g_hStatusWnd, SB_SETTEXT, 1, (LPARAM) szText);
 
-        //
-        //  If more than 900 megs are in the machine switch to M mode.
-        //
-
-        if ( g_MEMMax > 900 * 1024 )
-        {
-            StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtMEMM, g_MEMUsage / 1024, g_MEMMax / 1024);
-        }
-        else
-        {
-            StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtMEMK, g_MEMUsage, g_MEMMax);
-        }
+        StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtMEM, (unsigned int)(int)((double)(int)g_MEMUsage / (double)(int)g_MEMMax * 100.0));
 
         SendMessage(g_hStatusWnd, SB_SETTEXT, 2, (LPARAM) szText);
     }
@@ -2702,7 +2691,7 @@ g_aStrings[] =
     { g_szfmtTasks,   ARRAYSIZE(g_szfmtTasks),   IDS_FMTTASKS   },
     { g_szfmtProcs,   ARRAYSIZE(g_szfmtProcs),   IDS_FMTPROCS   },
     { g_szfmtCPU,     ARRAYSIZE(g_szfmtCPU),     IDS_FMTCPU     },
-    { g_szfmtMEMK,    ARRAYSIZE(g_szfmtMEMK),            IDS_FMTMEMK    },
+    { g_szfmtMEM,     ARRAYSIZE(g_szfmtMEM),             IDS_FMTMEM     },
     { g_szfmtMEMM,    ARRAYSIZE(g_szfmtMEMM),            IDS_FMTMEMM    },
     { g_szfmtCPUNum,  ARRAYSIZE(g_szfmtCPUNum),          IDS_FMTCPUNUM  },
     { g_szTotalCPU,   ARRAYSIZE(g_szTotalCPU),           IDS_TOTALTIME  },
