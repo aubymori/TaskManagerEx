@@ -148,6 +148,16 @@ typedef enum
 #define CM_FIRST IDM_ALLCPUS
 #define CM_LAST  IDM_MULTIGRAPH
 
+// Possible values for the memory history mode
+
+typedef enum
+{
+    MM_PHYSICAL,
+    MM_COMMITTED
+} MEMHISTMODE;
+#define MM_FIRST IDM_PHYSMEM
+#define MM_LAST  IDM_COMMITTED
+
 // Possible values for the update speed option
 
 typedef enum
@@ -221,6 +231,7 @@ public:
     BOOL        bUnused2;
     BOOL        m_bShowAllProcess;
     BOOL        m_bShutdownMenu;
+    MEMHISTMODE m_mmHistMode;
 
     HRESULT     Load();
     HRESULT     Save();

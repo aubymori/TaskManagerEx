@@ -463,6 +463,12 @@
 #define IDS_ERR_SHADOW_DISABLED         40126
 #define IDS_ERR_SHADOW_DISCONNECTED_NOTIFY_ON 40127
 #define IDS_PWDDLG_USER2                40128
+#define IDM_PHYSMEM                     40129
+#define IDM_COMMITTED                   40130
+#define IDS_PHYSMEM                     40131
+#define IDS_PHYSMEM_HISTORY             40132
+#define IDS_COMMITTED                   40133
+#define IDS_COMMITTED_HISTORY           40134
 #define ID_HELP                         0xE146  
 
 #define IDC_ADAPTERNAME                 50100

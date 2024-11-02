@@ -566,6 +566,11 @@ BEGIN
             MENUITEM "&One Graph, All CPUs",        IDM_ALLCPUS
             MENUITEM "One Graph &Per CPU",          IDM_MULTIGRAPH
         END
+        POPUP "&Memory History"
+        BEGIN
+            MENUITEM "&Physical Memory"             IDM_PHYSMEM
+            MENUITEM "&Commit Charge"               IDM_COMMITTED
+        END
         MENUITEM "&Show Kernel Times",          IDM_KERNELTIMES
     END
     MENUITEM "Sh&ut Down"                       IDM_MENU_SHUTDOWN
@@ -888,6 +893,8 @@ BEGIN
     IDM_DETAILS             "Displays information about each task"
     IDM_ALLCPUS             "A single history graph shows total CPU usage"
     IDM_MULTIGRAPH          "Each CPU has its own history graph"
+    IDM_PHYSMEM             "The memory graph shows physical memory usage"
+    IDM_COMMITTED           "The memory graph shows both physical memory and page file usage"
     IDM_ABOUT               "Displays program information, version number, and copyright"
     IDM_HIGH                "Updates the display twice per second"
     IDM_NORMAL              "Updates the display every two seconds"
@@ -1147,6 +1154,14 @@ BEGIN
     IDS_ERR_SHADOW_DISABLED "Can't remote control Session (ID %lu) because Remote control is disabled on that Session."
     IDS_ERR_SHADOW_DISCONNECTED_NOTIFY_ON 
                             "Can't remote control Session (ID %lu) because it is disconnected with user's required permission enabled."
+END
+
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_PHYSMEM            "Memory"
+    IDS_PHYSMEM_HISTORY    "Physical Memory Usage History"
+    IDS_COMMITTED          "Commit Charge"
+    IDS_COMMITTED_HISTORY  "Commit Charge History"
 END
 
 #endif    // English (U.S.) resources

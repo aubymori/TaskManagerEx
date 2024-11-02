@@ -24,12 +24,15 @@ __int64       PreviousCPUKernelTime[MAXIMUM_PROCESSORS] = {0 ,0};
 
 LPBYTE              g_pCPUHistory[MAXIMUM_PROCESSORS] = { NULL };
 LPBYTE              g_pKernelHistory[MAXIMUM_PROCESSORS] = { NULL };
+LPBYTE              g_pPhysMEMHistory = NULL;
 LPBYTE              g_pMEMHistory = NULL;
 
 BYTE                g_CPUUsage = 0;
 BYTE                g_KernelUsage = 0;
+__int64             g_PhysMEMUsage = 0;
+__int64             g_PhysMEMMax   = 0;
 __int64             g_MEMUsage = 0;
-__int64             g_MEMMax   = 0;
+__int64             g_MEMMax = 0;
 
 DWORD               g_PageSize;
 
@@ -654,21 +657,25 @@ void CPerfPage::DrawMEMGraph(LPDRAWITEMSTRUCT lpdi)
 
     HGDIOBJ hOld = SelectObject(m_hdcGraph, m_hPens[MEM_PEN]);
 
+    LPBYTE pMemHistory = (g_Options.m_mmHistMode == MM_PHYSICAL)
+        ? g_pPhysMEMHistory
+        : g_pMEMHistory;
+
     MoveToEx(m_hdcGraph,
              m_rcGraph.right,
-             m_rcGraph.bottom - (g_pMEMHistory[0] * GraphHeight) / 100,
+             m_rcGraph.bottom - (pMemHistory[0] * GraphHeight) / 100,
              (LPPOINT) NULL);
 
     for (int i = 0; i < HIST_SIZE && i * Scale < Width - 1; i++)
     {
-        if (0 == g_pMEMHistory[i])
+        if (0 == pMemHistory[i])
         {
             break;  // End of Data
         }
 
         LineTo(m_hdcGraph,
                m_rcGraph.right - Scale * i,
-               m_rcGraph.bottom - (g_pMEMHistory[i] * GraphHeight) / 100);
+               m_rcGraph.bottom - (pMemHistory[i] * GraphHeight) / 100);
     }
 
     BitBlt( lpdi->hDC,
@@ -755,6 +762,23 @@ void CPerfPage::UpdateGraphs()
     ShowWindow(GetDlgItem(m_hPage, IDC_MEMFRAME), g_Options.m_fNoTitle ? SW_HIDE : SW_SHOW);
     ShowWindow(GetDlgItem(m_hPage, IDC_MEMBARFRAME), g_Options.m_fNoTitle ? SW_HIDE : SW_SHOW);
     ShowWindow(GetDlgItem(m_hPage, IDC_MEMMETER), g_Options.m_fNoTitle ? SW_HIDE : SW_SHOW);
+
+    WCHAR szMem[256] = { 0 };
+    WCHAR szMemHist[256] = { 0 };
+    switch (g_Options.m_mmHistMode)
+    {
+        case MM_PHYSICAL:
+            LoadStringW(g_hInstance, IDS_PHYSMEM, szMem, 256);
+            LoadStringW(g_hInstance, IDS_PHYSMEM_HISTORY, szMemHist, 256);
+            break;
+        case MM_COMMITTED:
+            LoadStringW(g_hInstance, IDS_COMMITTED, szMem, 256);
+            LoadStringW(g_hInstance, IDS_COMMITTED_HISTORY, szMemHist, 256);
+            break;
+    }
+
+    SetDlgItemTextW(m_hPage, IDC_MEMBARFRAME, szMem);
+    SetDlgItemTextW(m_hPage, IDC_MEMFRAME, szMemHist);
 
     SizePerfPage();
 }
@@ -931,6 +955,8 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
 
 void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
 {
+    __int64 memUsage = (g_Options.m_mmHistMode == MM_PHYSICAL) ? g_PhysMEMUsage : g_MEMUsage;
+    __int64 memMax = (g_Options.m_mmHistMode == MM_PHYSICAL) ? g_PhysMEMMax : g_MEMMax;
     HBRUSH hBlack = (HBRUSH) GetStockObject(BLACK_BRUSH);
     HGDIOBJ hOld = SelectObject(lpdi->hDC, hBlack);
     Rectangle(lpdi->hDC, lpdi->rcItem.left, lpdi->rcItem.top, lpdi->rcItem.right, lpdi->rcItem.bottom);
@@ -941,7 +967,7 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
     SetTextColor(lpdi->hDC, GRAPH_TEXT_COLOR);
 
     WCHAR szBuf[32];
-    StrFormatByteSize64( g_MEMUsage * 1024, szBuf, ARRAYSIZE(szBuf) );
+    StrFormatByteSize64( memUsage * 1024, szBuf, ARRAYSIZE(szBuf) );
     RECT rcOut = lpdi->rcItem;
     rcOut.bottom -= 4;
     DrawText(lpdi->hDC, szBuf, -1, &rcOut, DT_SINGLELINE | DT_CENTER | DT_BOTTOM);
@@ -961,7 +987,7 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
 
         if (cBarHeight > 0)
         {
-            INT cBarLitPixels = (INT)(( g_MEMUsage * cBarHeight ) / g_MEMMax);
+            INT cBarLitPixels = (INT)(( memUsage * cBarHeight ) / memMax);
             cBarLitPixels = (cBarLitPixels / 3) * 3;
 
             if (cBarHeight != cBarLitPixels)
@@ -1629,7 +1655,13 @@ BYTE InitPerfInfo()
 
     }
 
-    g_pMEMHistory = (LPBYTE) LocalAlloc(LPTR, HIST_SIZE * sizeof(LPBYTE));
+    g_pPhysMEMHistory = (LPBYTE) LocalAlloc(LPTR, HIST_SIZE * sizeof(LPBYTE));
+    if (NULL == g_pPhysMEMHistory)
+    {
+        return 0;
+    }
+
+    g_pMEMHistory = (LPBYTE)LocalAlloc(LPTR, HIST_SIZE * sizeof(LPBYTE));
     if (NULL == g_pMEMHistory)
     {
         return 0;
@@ -1662,11 +1694,21 @@ BYTE InitPerfInfo()
         PPerfInfo++;
     }
 
+    g_PhysMEMMax = BasicInfo.NumberOfPhysicalPages * ( g_PageSize / 1024 );
+
     //
     // Get the maximum commit limit
     //
 
-    g_MEMMax = BasicInfo.NumberOfPhysicalPages * ( g_PageSize / 1024 );
+    SYSTEM_PERFORMANCE_INFORMATION PerfInfo;
+
+    Status = NtQuerySystemInformation(
+        SystemPerformanceInformation,
+        &PerfInfo,
+        sizeof(PerfInfo),
+        NULL);
+
+    g_MEMMax = PerfInfo.CommitLimit * ( g_PageSize / 1024 );
 
     return(g_cProcessors);
 }
@@ -1702,6 +1744,11 @@ void ReleasePerfInfo()
             g_pKernelHistory[i] = NULL;
         }
 
+    }
+
+    if (g_pPhysMEMHistory)
+    {
+        LocalFree(g_pPhysMEMHistory);
     }
 
     if (g_pMEMHistory)
@@ -1868,11 +1915,18 @@ void CalcCpuTime(BOOL fUpdateHistory)
             return;
         }
 
-        g_MEMUsage = g_MEMMax - (PerfInfo.AvailablePages * (g_PageSize / 1024));
+        g_PhysMEMUsage = g_PhysMEMMax - (PerfInfo.AvailablePages * (g_PageSize / 1024));
+        MoveMemory((LPVOID) (g_pPhysMEMHistory + 1),
+                   (LPVOID) (g_pPhysMEMHistory),
+                   sizeof(BYTE) * (HIST_SIZE - 1) );
+
+        g_pPhysMEMHistory[0] = (BYTE) (( g_PhysMEMUsage * 100 ) / g_PhysMEMMax );
+
+        g_MEMUsage = PerfInfo.CommittedPages * (g_PageSize / 1024);
         MoveMemory((LPVOID) (g_pMEMHistory + 1),
                    (LPVOID) (g_pMEMHistory),
                    sizeof(BYTE) * (HIST_SIZE - 1) );
 
-        g_pMEMHistory[0] = (BYTE) (( g_MEMUsage * 100 ) / g_MEMMax );
+        g_pMEMHistory[0] = (BYTE)((g_MEMUsage * 100) / g_MEMMax);
     }
 }

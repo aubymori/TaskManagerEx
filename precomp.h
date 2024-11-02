@@ -108,8 +108,8 @@ extern DWORD     g_cTasks;
 extern DWORD     g_cProcesses;
 extern BYTE      g_cProcessors;
 extern BYTE      g_CPUUsage;
-extern __int64   g_MEMUsage;
-extern __int64   g_MEMMax;
+extern __int64   g_PhysMEMUsage;
+extern __int64   g_PhysMEMMax;
 extern HMENU     g_hMenu;
 
 extern BYTE      g_CPUUsage;

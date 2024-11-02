@@ -534,6 +534,7 @@ void UpdateMenuStates()
     {
         CheckMenuRadioItem(hMenu, VM_FIRST, VM_LAST, VM_FIRST + (UINT) g_Options.m_vmViewMode, MF_BYCOMMAND);
         CheckMenuRadioItem(hMenu, CM_FIRST, CM_LAST, CM_FIRST + (UINT) g_Options.m_cmHistMode, MF_BYCOMMAND);
+        CheckMenuRadioItem(hMenu, MM_FIRST, MM_LAST, MM_FIRST + (UINT) g_Options.m_mmHistMode, MF_BYCOMMAND);
         CheckMenuRadioItem(hMenu, US_FIRST, US_LAST, US_FIRST + (UINT) g_Options.m_usUpdateSpeed, MF_BYCOMMAND);
 
         CheckMenuItem(hMenu, IDM_ALWAYSONTOP,       MF_BYCOMMAND | (g_Options.m_fAlwaysOnTop   ? MF_CHECKED : MF_UNCHECKED));
@@ -682,7 +683,7 @@ void UpdateStatusBar()
         StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtCPU, g_CPUUsage);
         SendMessage(g_hStatusWnd, SB_SETTEXT, 1, (LPARAM) szText);
 
-        StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtMEM, (unsigned int)(int)((double)(int)g_MEMUsage / (double)(int)g_MEMMax * 100.0));
+        StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtMEM, (unsigned int)(int)((double)(int)g_PhysMEMUsage / (double)(int)g_PhysMEMMax * 100.0));
 
         SendMessage(g_hStatusWnd, SB_SETTEXT, 2, (LPARAM) szText);
     }
@@ -2158,6 +2159,17 @@ void MainWnd_OnCommand(HWND hwnd, int id)
     case IDM_ALLCPUS:
     case IDM_MULTIGRAPH:
         g_Options.m_cmHistMode = (CPUHISTMODE) (id - CM_FIRST);
+        UpdateMenuStates();
+        if (PERF_PAGE < g_nPageCount)
+        {
+            ((CPerfPage *)(g_pPages[PERF_PAGE]))->UpdateGraphs();
+            g_pPages[PERF_PAGE]->TimerEvent();
+        }
+        break;
+    
+    case IDM_PHYSMEM:
+    case IDM_COMMITTED:
+        g_Options.m_mmHistMode = (MEMHISTMODE)(id - MM_FIRST);
         UpdateMenuStates();
         if (PERF_PAGE < g_nPageCount)
         {
