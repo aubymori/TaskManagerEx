@@ -11,6 +11,17 @@
 
 #include "precomp.h"
 
+// Size macros for the bitmap we use to draw LED digits
+
+#define DIGITS_STRIP_WIDTH  104
+#define DIGITS_STRIP_HEIGHT 11
+#define DIGIT_WIDTH         8
+#define DIGIT_HEIGHT        (DIGITS_STRIP_HEIGHT)
+#define PERCENT_SIGN_INDEX  10  // Index into bitmap strip where % sign lives
+#define K_INDEX             11  // Index into bitmap strip where "K" lives
+#define M_INDEX             12  // Index into bitmap strip where "M" lives
+#define BLANK_INDEX         13  // Index into bitmap where blank digit lives
+
 #define GRAPH_BRUSH         BLACK_BRUSH
 #define GRAPH_LINE_COLOR    RGB(0, 128, 64)
 #define GRAPH_TEXT_COLOR    RGB(0, 255, 0)
@@ -833,11 +844,14 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
     // Draw the digits into the ownder draw control
     //
 
+    INT xOffset = ((lpdi->rcItem.right - lpdi->rcItem.left) - 4 * DIGIT_WIDTH) / 2 - 2;
+    INT yOffset = (lpdi->rcItem.bottom - DIGIT_HEIGHT - g_DefSpacing);
     INT xBarOffset = ((lpdi->rcItem.right - lpdi->rcItem.left) - STRIP_WIDTH) / 2;
 
     RECT rcBar;
     GetWindowRect(GetDlgItem(m_hPage, IDC_MEMMETER), &rcBar);
-    INT cBarHeight = lpdi->rcItem.bottom - lpdi->rcItem.top - (GetCurFontSize(lpdi->hDC) + g_DefSpacing * 3);
+    INT yDigit = g_Options.m_bLedNumbers ? DIGIT_HEIGHT : GetCurFontSize(lpdi->hDC);
+    INT cBarHeight = lpdi->rcItem.bottom - lpdi->rcItem.top - (yDigit + g_DefSpacing * 3);
     if (cBarHeight <= 0)
     {
         return;
@@ -860,11 +874,58 @@ void CPerfPage::DrawCPUDigits(LPDRAWITEMSTRUCT lpdi)
 
     RECT rcOut = lpdi->rcItem;
     rcOut.bottom -= 4;
-    DrawText(lpdi->hDC, szBuf, -1, &rcOut, DT_SINGLELINE | DT_CENTER | DT_BOTTOM);
+    if (!g_Options.m_bLedNumbers)
+        DrawText(lpdi->hDC, szBuf, -1, &rcOut, DT_SINGLELINE | DT_CENTER | DT_BOTTOM);
 
     HDC hdcMem = CreateCompatibleDC(lpdi->hDC);
     if (hdcMem)
     {
+        if (g_Options.m_bLedNumbers)
+        {
+            HBITMAP hOldbmp = (HBITMAP)SelectObject(hdcMem, m_hDigits);
+            if (hOldbmp)
+            {
+                int Place = 100;
+                int Value = g_CPUUsage;
+                BOOL fDrawnYet = FALSE;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    // Don't zero-pad
+
+                    if (Value / Place == 0 && fDrawnYet == FALSE && Place != 1)
+                    {
+                        BitBlt(lpdi->hDC, xOffset + DIGIT_WIDTH * i, yOffset,
+                            DIGIT_WIDTH, DIGIT_HEIGHT,
+                            hdcMem,
+                            BLANK_INDEX * DIGIT_WIDTH, 0,
+                            SRCCOPY);
+                    }
+                    else
+                    {
+                        BitBlt(lpdi->hDC, xOffset + DIGIT_WIDTH * i, yOffset,
+                            DIGIT_WIDTH, DIGIT_HEIGHT,
+                            hdcMem,
+                            (Value / Place) * DIGIT_WIDTH, 0,
+                            SRCCOPY);
+                        if (Value / Place)
+                        {
+                            fDrawnYet = TRUE;
+                        }
+                    }
+                    Value %= Place;
+                    Place /= 10;
+                }
+            }
+
+            // Percent sign
+
+            BitBlt(lpdi->hDC, xOffset + 3 * DIGIT_WIDTH, yOffset,
+                DIGIT_WIDTH, DIGIT_HEIGHT,
+                hdcMem,
+                PERCENT_SIGN_INDEX * DIGIT_WIDTH, 0, SRCCOPY);
+        }
+
         //
         // Draw the CPU meter
         //
@@ -957,10 +1018,42 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
 {
     __int64 memUsage = (g_Options.m_mmHistMode == MM_PHYSICAL) ? g_PhysMEMUsage : g_MEMUsage;
     __int64 memMax = (g_Options.m_mmHistMode == MM_PHYSICAL) ? g_PhysMEMMax : g_MEMMax;
+
+    // <1GB. 6 digits, K symbol.
+    int cDigits = 6;
+    int Place = 100000;
+    BOOL fNoSymbol = FALSE;
+    BOOL fMegabytes = FALSE;
+    
+    // >100GB: 7 digits, no symbol, megabytes.
+    if (memUsage >= 100000000)
+    {
+        cDigits = 7;
+        Place = 1000000;
+        fNoSymbol = TRUE;
+        fMegabytes = TRUE;
+    }
+    // >1GB, <100GB. 6 digits, M symbol.
+    else if (memUsage >= 10000000)
+    {
+        cDigits = 6;
+        fMegabytes = TRUE;
+    }
+    // >1GB, <10GB: 7 digits, no symbol, kilobytes.
+    else if (memUsage >= 1000000)
+    {
+        cDigits = 7;
+        Place = 1000000;
+        fNoSymbol = TRUE;
+    }
+
     HBRUSH hBlack = (HBRUSH) GetStockObject(BLACK_BRUSH);
     HGDIOBJ hOld = SelectObject(lpdi->hDC, hBlack);
     Rectangle(lpdi->hDC, lpdi->rcItem.left, lpdi->rcItem.top, lpdi->rcItem.right, lpdi->rcItem.bottom);
 
+    INT xOffset = ((lpdi->rcItem.right - lpdi->rcItem.left) -
+        ((fNoSymbol ? (cDigits) : (cDigits + 1)) * DIGIT_WIDTH)) / 2;
+    INT yOffset = (lpdi->rcItem.bottom - DIGIT_HEIGHT - g_DefSpacing);
     INT xBarOffset = ((lpdi->rcItem.right - lpdi->rcItem.left) - STRIP_WIDTH) / 2;
 
     SetBkMode(lpdi->hDC, TRANSPARENT);
@@ -970,11 +1063,63 @@ void CPerfPage::DrawMEMMeter(LPDRAWITEMSTRUCT lpdi)
     StrFormatByteSize64( memUsage * 1024, szBuf, ARRAYSIZE(szBuf) );
     RECT rcOut = lpdi->rcItem;
     rcOut.bottom -= 4;
-    DrawText(lpdi->hDC, szBuf, -1, &rcOut, DT_SINGLELINE | DT_CENTER | DT_BOTTOM);
+    if (!g_Options.m_bLedNumbers)
+        DrawText(lpdi->hDC, szBuf, -1, &rcOut, DT_SINGLELINE | DT_CENTER | DT_BOTTOM);
 
     HDC hdcMem = CreateCompatibleDC(lpdi->hDC);
     if (hdcMem)
     {
+        if (g_Options.m_bLedNumbers)
+        {
+            HBITMAP hOldbmp = (HBITMAP)SelectObject(hdcMem, m_hDigits);
+            if (hOldbmp)
+            {
+                int Value = memUsage;
+                if (fMegabytes)
+                    Value /= 1000;
+                BOOL fDrawnYet = FALSE;
+
+                for (int i = 0; i < cDigits; i++)
+                {
+                    // Don't zero-pad
+
+                    if (Value / Place == 0 && fDrawnYet == FALSE)
+                    {
+                        BitBlt(lpdi->hDC, xOffset + DIGIT_WIDTH * i, yOffset,
+                            DIGIT_WIDTH, DIGIT_HEIGHT,
+                            hdcMem,
+                            BLANK_INDEX * DIGIT_WIDTH, 0,
+                            SRCCOPY);
+                    }
+                    else
+                    {
+                        BitBlt(lpdi->hDC, xOffset + DIGIT_WIDTH * i, yOffset,
+                            DIGIT_WIDTH, DIGIT_HEIGHT,
+                            hdcMem,
+                            (Value / Place) * DIGIT_WIDTH, 0,
+                            SRCCOPY);
+                        if (Value / Place)
+                        {
+                            fDrawnYet = TRUE;
+                        }
+                    }
+                    Value %= Place;
+                    Place /= 10;
+
+                };
+
+                if (FALSE == fNoSymbol)
+                {
+                    // K/M
+                    int index = fMegabytes ? M_INDEX : K_INDEX;
+                    BitBlt(lpdi->hDC, xOffset + cDigits * DIGIT_WIDTH, yOffset,
+                        DIGIT_WIDTH, DIGIT_HEIGHT,
+                        hdcMem,
+                        index * DIGIT_WIDTH, 0, SRCCOPY);
+                }
+            }
+        }
+
         //
         // Draw the CPU meter
         //
@@ -1392,6 +1537,11 @@ HRESULT CPerfPage::Initialize(HWND hwndParent)
 
     CreatePens();
 
+    m_hDigits = (HBITMAP) LoadImage(g_hInstance, MAKEINTRESOURCE(LED_NUMBERS),
+                                     IMAGE_BITMAP,
+                                     0, 0,
+                                     LR_DEFAULTCOLOR);
+
     m_hStripLit = (HBITMAP) LoadImage(g_hInstance, MAKEINTRESOURCE(LED_STRIP_LIT),
                                      IMAGE_BITMAP,
                                      0, 0,
@@ -1568,6 +1718,12 @@ HRESULT CPerfPage::Destroy()
     {
         DestroyWindow(m_hPage);
         m_hPage = NULL;
+    }
+
+    if (m_hDigits)
+    {
+        DeleteObject(m_hDigits);
+        m_hDigits = NULL;
     }
 
     if (m_hStripLit)

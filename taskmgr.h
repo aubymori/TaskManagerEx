@@ -165,7 +165,7 @@ typedef enum
     US_HIGH,
     US_NORMAL,
     US_LOW,
-    US_PAUSED
+    US_PAUSED,
 } UPDATESPEED;
 #define US_FIRST IDM_HIGH
 #define US_LAST  IDM_PAUSED
@@ -232,6 +232,7 @@ public:
     BOOL        m_bShowAllProcess;
     BOOL        m_bShutdownMenu;
     MEMHISTMODE m_mmHistMode;
+    BOOL        m_bLedNumbers;
 
     HRESULT     Load();
     HRESULT     Save();

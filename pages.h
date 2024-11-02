@@ -228,6 +228,7 @@ class CPerfPage : public CPage
 {
     HWND        m_hPage;                    // Handle to this page's dlg
     HWND        m_hwndTabs;                 // Parent window
+    HBITMAP     m_hDigits;                  // Digits bitmap
     HBITMAP     m_hStripUnlit;              // Digits bitmap
     HBITMAP     m_hStripLitRed;             // Digits bitmap
     HBITMAP     m_hStripLit;                // Digits bitmap

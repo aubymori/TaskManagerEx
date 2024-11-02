@@ -28,6 +28,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Bitmap
 //
 
+LED_NUMBERS             BITMAP  DISCARDABLE     "res\\numbers.bmp"
 LED_STRIP_LIT           BITMAP  DISCARDABLE     "res\\ledlit.bmp"
 LED_STRIP_UNLIT         BITMAP  DISCARDABLE     "res\\ledunlit.bmp"
 LED_STRIP_LIT_RED       BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
@@ -571,6 +572,7 @@ BEGIN
             MENUITEM "&Physical Memory"             IDM_PHYSMEM
             MENUITEM "&Commit Charge"               IDM_COMMITTED
         END
+        MENUITEM "Show &LED Numbers",           IDM_LEDNUMBERS
         MENUITEM "&Show Kernel Times",          IDM_KERNELTIMES
     END
     MENUITEM "Sh&ut Down"                       IDM_MENU_SHUTDOWN
@@ -914,6 +916,7 @@ BEGIN
     IDM_REFRESH             "Force Task Manager to update now, regardless of Update Speed setting"
     IDM_WHATSTHIS           "Provides access to point and click help"
     IDM_AFFINITY            "Controls which processors the process will be allowed to run on"
+    IDM_LEDNUMBERS          "Show LED numbers on the graphs, like Windows NT 4.0."
     IDM_KERNELTIMES         "Displays kernel time in the performance graphs"
     IDS_NOAFFINITYMASK      "The process must have affinity with at least one processor."
     IDS_INVALIDOPTION       "Invalid Option"

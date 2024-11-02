@@ -388,6 +388,8 @@ void COptions::SetDefaultValues()
 
     m_bShowAllProcess = (g_fIsTSEnabled && IsUserAdmin());
     m_bShutdownMenu = TRUE;
+    m_mmHistMode = MM_PHYSICAL;
+    m_bLedNumbers = FALSE;
 
     const COLUMNID *pcol = (g_fIsTSEnabled) ? g_aTSCols : g_aDefaultCols;
 
@@ -540,6 +542,7 @@ void UpdateMenuStates()
         CheckMenuItem(hMenu, IDM_ALWAYSONTOP,       MF_BYCOMMAND | (g_Options.m_fAlwaysOnTop   ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_MINIMIZEONUSE,     MF_BYCOMMAND | (g_Options.m_fMinimizeOnUse ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_SHOWSHUTDOWN,      MF_BYCOMMAND | (g_Options.m_bShutdownMenu  ? MF_CHECKED : MF_UNCHECKED));
+        CheckMenuItem(hMenu, IDM_LEDNUMBERS,        MF_BYCOMMAND | (g_Options.m_bLedNumbers    ? MF_CHECKED : MF_UNCHECKED));    
         CheckMenuItem(hMenu, IDM_KERNELTIMES,       MF_BYCOMMAND | (g_Options.m_fKernelTimes   ? MF_CHECKED : MF_UNCHECKED));    
         CheckMenuItem(hMenu, IDM_NOTITLE,           MF_BYCOMMAND | (g_Options.m_fNoTitle       ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_HIDEWHENMIN,       MF_BYCOMMAND | (g_Options.m_fHideWhenMin   ? MF_CHECKED : MF_UNCHECKED));
@@ -2054,6 +2057,15 @@ void MainWnd_OnCommand(HWND hwnd, int id)
     case IDM_EJECT:
     case IDM_LOCKWORKSTATION:
         ExecuteShutdownMenuOption(id);
+        break;
+
+    case IDM_LEDNUMBERS:
+        g_Options.m_bLedNumbers = !g_Options.m_bLedNumbers;
+        UpdateMenuStates();
+        if (PERF_PAGE < g_nPageCount)
+        {
+            g_pPages[PERF_PAGE]->TimerEvent();
+        }
         break;
 
     case IDM_KERNELTIMES:

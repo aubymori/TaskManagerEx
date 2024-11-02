@@ -3,6 +3,7 @@
 // Used by taskmgr.rc
 //
 #pragma once
+#define LED_NUMBERS                     102
 #define LED_STRIP_LIT                   103
 #define LED_STRIP_UNLIT                 104
 #define IDD_MAINWND                     105
@@ -469,6 +470,7 @@
 #define IDS_PHYSMEM_HISTORY             40132
 #define IDS_COMMITTED                   40133
 #define IDS_COMMITTED_HISTORY           40134
+#define IDM_LEDNUMBERS                  40135
 #define ID_HELP                         0xE146  
 
 #define IDC_ADAPTERNAME                 50100
