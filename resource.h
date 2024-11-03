@@ -269,6 +269,9 @@
 #define IDS_SHUTDOWN_REMOTE_OTHERUSERS  4051
 #define IDS_SHUTDOWN_OTHERUSERS         4052
 #define IDS_RESTART_OTHERUSERS          4053
+#define IDD_CUSTOM_INTERVAL             4054
+#define IDC_CUSTOM_INTERVAL_INPUT       4055
+#define IDC_CUSTOM_INTERVAL_SPINNER     4056
 
 //
 //  5000-5999 reserved for dynamic creation of CPU graphs
@@ -410,6 +413,7 @@
 #define IDM_NORMAL                      40023
 #define IDM_LOW                         40024
 #define IDM_PAUSED                      40025
+#define IDM_CUSTOM                      40026
 #define IDM_PROC_DEBUG                  40027
 #define IDM_PROC_TERMINATE              40028
 

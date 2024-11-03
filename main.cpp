@@ -1914,6 +1914,69 @@ void ExecuteShutdownMenuOption(int iID)
 }
 
 
+/*++ CustomIntervalDlgProc
+
+Routine Description:
+
+    Dialog procedure for Set Custom Interval dialog
+
+Revision History:
+
+      Nov-02-24 aubymori  Created
+
+--*/
+INT_PTR CALLBACK CustomIntervalDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+        case WM_INITDIALOG:
+            SendDlgItemMessageW(hwndDlg, 
+                                IDC_CUSTOM_INTERVAL_SPINNER, 
+                                UDM_SETRANGE32,
+                                0, 
+                                MAXINT32);
+            SendDlgItemMessageW(hwndDlg, 
+                                IDC_CUSTOM_INTERVAL_SPINNER, 
+                                UDM_SETPOS32,
+                                0, 
+                                g_Options.m_dwTimerInterval);
+            SetDlgItemInt(hwndDlg, 
+                        IDC_CUSTOM_INTERVAL_INPUT, 
+                        g_Options.m_dwTimerInterval, 
+                        FALSE);
+            return TRUE;
+        case WM_CLOSE:
+            EndDialog(hwndDlg, IDCANCEL);
+            return TRUE;
+        case WM_COMMAND:
+            switch (wParam)
+            {
+                case IDOK:
+                {
+                    DWORD dwNewInterval = GetDlgItemInt(hwndDlg,
+                                                       IDC_CUSTOM_INTERVAL_INPUT,
+                                                       NULL,
+                                                       FALSE);
+
+                    // don't need to update if same time
+                    if (dwNewInterval == g_Options.m_dwTimerInterval)
+                        EndDialog(hwndDlg, IDCANCEL);
+
+                    g_Options.m_dwTimerInterval = dwNewInterval;
+                    g_Options.m_usUpdateSpeed = US_CUSTOM;
+                    EndDialog(hwndDlg, IDOK);
+                    break;
+                }
+                case IDCANCEL:
+                    EndDialog(hwndDlg, IDCANCEL);
+                    break;
+            }
+            return TRUE;
+        default:
+            return FALSE;
+    }
+}
+
 /*++ MainWnd_OnCommand
 
 Routine Description:
@@ -2265,6 +2328,22 @@ void MainWnd_OnCommand(HWND hwnd, int id)
                 SetTimer(g_hMainWnd, 0, g_Options.m_dwTimerInterval, NULL);
             }
 
+            UpdateMenuStates();
+        }
+        break;
+
+    case IDM_CUSTOM:
+        if (IDOK == DialogBoxParam(g_hInstance, 
+                                MAKEINTRESOURCE(IDD_CUSTOM_INTERVAL),
+                                g_hMainWnd, 
+                                CustomIntervalDlgProc, 
+                                NULL))
+        {
+            KillTimer(g_hMainWnd, 0);
+            if (g_Options.m_dwTimerInterval)
+            {
+                SetTimer(g_hMainWnd, 0, g_Options.m_dwTimerInterval, NULL);
+            }
             UpdateMenuStates();
         }
         break;

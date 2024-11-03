@@ -166,9 +166,10 @@ typedef enum
     US_NORMAL,
     US_LOW,
     US_PAUSED,
+    US_CUSTOM,
 } UPDATESPEED;
 #define US_FIRST IDM_HIGH
-#define US_LAST  IDM_PAUSED
+#define US_LAST  IDM_CUSTOM
 
 
 
