@@ -84,8 +84,11 @@ static const INT aPerfControls[] =
     IDC_STATIC15,
     IDC_STATIC16,
     IDC_STATIC17,
+    IDC_STATIC18,
+    IDC_STATIC19,
     IDC_TOTAL_PHYSICAL,
     IDC_AVAIL_PHYSICAL,
+    IDC_FREE_PHYSICAL,
     IDC_FILE_CACHE,
     IDC_COMMIT_TOTAL,
     IDC_COMMIT_LIMIT,
@@ -96,6 +99,7 @@ static const INT aPerfControls[] =
     IDC_TOTAL_HANDLES,
     IDC_TOTAL_THREADS,
     IDC_TOTAL_PROCESSES,
+    IDC_UP_TIME,
 };
 
 // Amount of spacing down from the top of a group box to the
@@ -1238,6 +1242,34 @@ void CPerfPage::TimerEvent()
         InvalidateRect(GetDlgItem(m_hPage, IDC_MEMGRAPH), NULL, FALSE);
         UpdateWindow(GetDlgItem(m_hPage, IDC_MEMGRAPH));
     }
+
+    //
+    // Update Up Time display
+    //
+    TCHAR szUpTime[MAX_PATH];
+    SYSTEM_TIMEOFDAY_INFORMATION TimeInfo;
+    ULONG ReturnLength = 0;
+    NTSTATUS Status = NtQuerySystemInformation(
+        SystemTimeOfDayInformation,
+        &TimeInfo,
+        sizeof(TimeInfo),
+        &ReturnLength
+    );
+
+    //
+    // The times in this structure are expressed in microseconds;
+    // divide them after subtracting to make it into seconds.
+    //
+    ULONGLONG UpTime = (TimeInfo.CurrentTime.QuadPart - TimeInfo.BootTime.QuadPart) / 10000000;
+    StringCchPrintf(
+        szUpTime, ARRAYSIZE(szUpTime),
+        TEXT("%u:%02u:%02u:%02u"),
+        UpTime / 86400,
+        UpTime % 86400 / 3600,
+        UpTime % 3600 / 60,
+        UpTime % 60
+    );
+    SetDlgItemText(m_hPage, IDC_UP_TIME, szUpTime);
 }
 
 /*++ PerfPageProc

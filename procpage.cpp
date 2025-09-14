@@ -2304,6 +2304,7 @@ g_OffsetMap[] =
     { FIELD_OFFSET(CSysInfo, m_cProcesses),       IDC_TOTAL_PROCESSES },
     { FIELD_OFFSET(CSysInfo, m_dwPhysicalMemory), IDC_TOTAL_PHYSICAL  },
     { FIELD_OFFSET(CSysInfo, m_dwPhysAvail),      IDC_AVAIL_PHYSICAL  },
+    { FIELD_OFFSET(CSysInfo, m_dwPhysFree),       IDC_FREE_PHYSICAL   },
     { FIELD_OFFSET(CSysInfo, m_dwFileCache),      IDC_FILE_CACHE      },
     { FIELD_OFFSET(CSysInfo, m_dwCommitTotal),    IDC_COMMIT_TOTAL    },
     { FIELD_OFFSET(CSysInfo, m_dwCommitLimit),    IDC_COMMIT_LIMIT    },
@@ -2324,11 +2325,14 @@ HRESULT CProcPage::UpdateProcInfoArray()
     ULONG    cbOffset   = 0;
     CSysInfo SysInfoTemp;
     NTSTATUS Status;
+    ULONG    DosStatus;
 
     SYSTEM_BASIC_INFORMATION        BasicInfo;
     PSYSTEM_PROCESS_INFORMATION     pCurrent;
     SYSTEM_PERFORMANCE_INFORMATION  PerfInfo;
     SYSTEM_FILECACHE_INFORMATION    FileCache;
+    SUPERFETCH_INFORMATION          SuperFetchInfo;
+    PF_MEMORY_LIST_INFO            *pMemListInfo;
 
     __int64 TotalTime = 0;
     __int64 LastTotalTime = 0;
@@ -2345,6 +2349,48 @@ HRESULT CProcPage::UpdateProcInfoArray()
     //
     // Get some non-process specific info, like memory status
     //
+
+    ZeroMemory(&SuperFetchInfo, sizeof(SuperFetchInfo));
+    SuperFetchInfo.Version = 45;
+    SuperFetchInfo.Magic = 1802856515;
+    SuperFetchInfo.InfoClass = SuperfetchMemoryListQuery;
+
+    ULONGLONG TotalFreePageCount = 0;
+    ULONG StructSize = sizeof(PF_MEMORY_LIST_INFO);
+AllocMemListInfo:
+    pMemListInfo = (PF_MEMORY_LIST_INFO *)HeapAlloc(GetProcessHeap(), 0, StructSize);
+    if (!pMemListInfo)
+    {
+        return E_OUTOFMEMORY;
+    }
+
+    SuperFetchInfo.Length = StructSize;
+    SuperFetchInfo.Data = pMemListInfo;
+
+    Status = NtQuerySystemInformation(
+                SystemSuperfetchInformation,
+                &SuperFetchInfo,
+                sizeof(SuperFetchInfo),
+                &StructSize
+            );
+
+    DosStatus = RtlNtStatusToDosError(Status);
+    if (DosStatus == ERROR_MORE_DATA)
+    {
+        HeapFree(GetProcessHeap(), 0, pMemListInfo);
+        goto AllocMemListInfo;
+    }
+    else if (!NT_SUCCESS(Status))
+    {
+        return E_FAIL;
+    }
+
+    for (UINT i = 0; i < pMemListInfo->NodeCount; i++)
+    {
+        TotalFreePageCount += pMemListInfo->Nodes[i].FreePageCount;
+    }
+
+    HeapFree(GetProcessHeap(), 0, pMemListInfo);
 
     Status = NtQuerySystemInformation(
                 SystemBasicInformation,
@@ -2374,6 +2420,7 @@ HRESULT CProcPage::UpdateProcInfoArray()
     }
 
     SysInfoTemp.m_dwPhysAvail   = PerfInfo.AvailablePages    * (g_BasicInfo.PageSize / 1024);
+    SysInfoTemp.m_dwPhysFree    = TotalFreePageCount    * (g_BasicInfo.PageSize / 1024);
     SysInfoTemp.m_dwCommitTotal = (DWORD)(PerfInfo.CommittedPages    * (g_BasicInfo.PageSize / 1024));
     SysInfoTemp.m_dwCommitLimit = (DWORD)(PerfInfo.CommitLimit       * (g_BasicInfo.PageSize / 1024));
     SysInfoTemp.m_dwCommitPeak  = (DWORD)(PerfInfo.PeakCommitment    * (g_BasicInfo.PageSize / 1024));

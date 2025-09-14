@@ -290,6 +290,7 @@ public:
     DWORD   m_cProcesses;
     DWORD   m_dwPhysicalMemory;
     DWORD   m_dwPhysAvail;
+    DWORD   m_dwPhysFree;
     DWORD   m_dwFileCache;
     DWORD   m_dwKernelPaged;
     DWORD   m_dwKernelNP;

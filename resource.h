@@ -181,6 +181,10 @@
 #define IDC_WRITEXFERCOUNT              2036
 #define IDC_OTHERXFERCOUNT              2037
 #define IDC_COMMANDLINE                 2038
+#define IDC_STATIC18                    2039
+#define IDC_FREE_PHYSICAL               2040
+#define IDC_STATIC19                    2041
+#define IDC_UP_TIME                     2042
 
 #define IDR_MAINMENU_NET                2400
 #define IDM_BYTESSENT                   2401

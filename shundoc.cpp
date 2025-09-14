@@ -105,6 +105,8 @@ NTSTATUS (NTAPI *NtQueryInformationProcess)(
 
 BOOL (WINAPI *EndTask)(HWND hWnd, BOOL fShutDown, BOOL fForce) = nullptr;
 
+ULONG (NTAPI *RtlNtStatusToDosError)(NTSTATUS Status);
+
 //
 // Function loader
 //
@@ -144,6 +146,7 @@ bool SHUndocInit(void)
 	LOAD_FUNCTION(ntdll, RtlTimeToElapsedTimeFields);
 	LOAD_FUNCTION(ntdll, RtlGetVersion);
 	LOAD_FUNCTION(ntdll, NtQueryInformationProcess);
+	LOAD_FUNCTION(ntdll, RtlNtStatusToDosError);
 
 	LOAD_MODULE(winsta);
 	LOAD_FUNCTION(winsta, WinStationGetProcessSid);
