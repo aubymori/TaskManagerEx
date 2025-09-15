@@ -931,6 +931,7 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
     TabCtrl_SetCurSel(GetDlgItem(g_hMainWnd, IDC_TABS), g_Options.m_iCurrentPage);
     
     g_pPages[g_Options.m_iCurrentPage]->Activate();
+    g_pPages[g_Options.m_iCurrentPage]->UpdateMenuBar();
 
     RECT rcMainClient;
     GetClientRect(hwnd, &rcMainClient);
@@ -1142,13 +1143,15 @@ BOOL MainWnd_OnTabCtrlNotify(LPNMHDR pnmhdr)
 
                 if (-1 != g_Options.m_iCurrentPage)
                 {
-                    g_pPages[iTab]->Activate();                    
+                    g_pPages[g_Options.m_iCurrentPage]->Activate();    
+                    g_pPages[g_Options.m_iCurrentPage]->UpdateMenuBar();
                     SizeChildPage(g_hMainWnd);
                 }
 
             }
             else
             {
+                g_pPages[iTab]->UpdateMenuBar();
                 g_Options.m_iCurrentPage = iTab;
                 SizeChildPage(g_hMainWnd);
                 return TRUE;
@@ -2083,6 +2086,7 @@ void MainWnd_OnCommand(HWND hwnd, int id)
 
     case IDM_SHOWSHUTDOWN:
         g_Options.m_bShutdownMenu = !g_Options.m_bShutdownMenu;
+        g_pPages[g_Options.m_iCurrentPage]->UpdateMenuBar();
         UpdateMenuStates();
         break;
 

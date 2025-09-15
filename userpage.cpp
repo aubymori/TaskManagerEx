@@ -2113,26 +2113,6 @@ HRESULT CUserPage::Activate()
         0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE
     );
-
-    //
-    // Change the menu bar to be the menu for this page
-    //
-
-    HMENU hMenuOld = GetMenu(g_hMainWnd);
-    HMENU hMenuNew = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MAINMENU_USER));
-    
-    AdjustMenuBar(hMenuNew);
-
-    g_hMenu = hMenuNew;
-    if (g_Options.m_fNoTitle == FALSE)
-    {
-        SetMenu(g_hMainWnd, hMenuNew);
-    }
-
-    if (hMenuOld)
-    {
-        DestroyMenu(hMenuOld);
-    }
     
     UpdateUIState();
 
@@ -2149,6 +2129,45 @@ HRESULT CUserPage::Activate()
     }
 
     return S_OK;
+}
+
+/*++ CUserPage::UpdateMenuBar
+
+Routine Description:
+
+    Updates the menu bar for this page
+
+Arguments:
+
+Return Value:
+
+Revision History:
+
+      Sep-14-25 aubymori  Created
+
+--*/
+
+void CUserPage::UpdateMenuBar()
+{
+    //
+    // Change the menu bar to be the menu for this page
+    //
+
+    HMENU hMenuOld = GetMenu(g_hMainWnd);
+    HMENU hMenuNew = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MAINMENU_USER));
+
+    AdjustMenuBar(hMenuNew);
+
+    g_hMenu = hMenuNew;
+    if (g_Options.m_fNoTitle == FALSE)
+    {
+        SetMenu(g_hMainWnd, hMenuNew);
+    }
+
+    if (hMenuOld)
+    {
+        DestroyMenu(hMenuOld);
+    }
 }
 
 

@@ -4231,6 +4231,36 @@ HRESULT CProcPage::Activate()
                  0, 0, 0, 0,
                  SWP_NOMOVE | SWP_NOSIZE);
 
+    // If the tab control has focus, leave it there. Otherwise, set focus
+    // to the listview.  If we don't set focus, it may stay on the previous
+    // page, now hidden, which can confuse the dialog manager and may cause
+    // us to hang.
+    if (GetFocus() != m_hwndTabs)
+    {
+        SetFocus(GetDlgItem(m_hPage, IDC_PROCLIST));
+    }
+
+    return S_OK;
+}
+
+/*++ CProcPage::UpdateMenuBar
+
+Routine Description:
+
+    Updates the menu bar for this page
+
+Arguments:
+
+Return Value:
+
+Revision History:
+
+      Sep-14-25 aubymori  Created
+
+--*/
+
+void CProcPage::UpdateMenuBar()
+{
     //
     // Change the menu bar to be the menu for this page
     //
@@ -4255,17 +4285,6 @@ HRESULT CProcPage::Activate()
     {
         DestroyMenu(hMenuOld);
     }
-
-    // If the tab control has focus, leave it there. Otherwise, set focus
-    // to the listview.  If we don't set focus, it may stay on the previous
-    // page, now hidden, which can confuse the dialog manager and may cause
-    // us to hang.
-    if (GetFocus() != m_hwndTabs)
-    {
-        SetFocus(GetDlgItem(m_hPage, IDC_PROCLIST));
-    }
-
-    return S_OK;
 }
 
 /*++ CProcPage::Initialize

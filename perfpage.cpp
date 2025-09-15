@@ -1499,6 +1499,32 @@ HRESULT CPerfPage::Activate()
 
     UpdateGraphs();
 
+    // There are no tabstops on this page, but we have to set focus somewhere.
+    // If we don't, it may stay on the previous page, now hidden, which can
+    // confuse the dialog manager and may cause us to hang.
+    SetFocus(m_hwndTabs);
+
+    return S_OK;
+}
+
+/*++ CPerfPage::UpdateMenuBar
+
+Routine Description:
+
+    Updates the menu bar for this page
+
+Arguments:
+
+Return Value:
+
+Revision History:
+
+      Sep-14-25 aubymori  Created
+
+--*/
+
+void CPerfPage::UpdateMenuBar()
+{
     //
     // Change the menu bar to be the menu for this page
     //
@@ -1523,13 +1549,6 @@ HRESULT CPerfPage::Activate()
     {
         DestroyMenu(hMenuOld);
     }
-
-    // There are no tabstops on this page, but we have to set focus somewhere.
-    // If we don't, it may stay on the previous page, now hidden, which can
-    // confuse the dialog manager and may cause us to hang.
-    SetFocus(m_hwndTabs);
-
-    return S_OK;
 }
 
 /*++ CPerfPage::Initialize

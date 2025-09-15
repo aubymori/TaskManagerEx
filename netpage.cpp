@@ -2633,17 +2633,41 @@ HRESULT CNetPage::Activate()
 
     TimerEvent();
 
-    // Change the menu bar to be the menu for this page
+    SizeNetPage();
 
+    return S_OK;
+}
+
+/*++
+
+Routine Description:
+
+    This function is called when the menu for the Network tab is updated.
+
+Arguments:
+
+    NONE
+
+Return Value:
+
+    NONE
+
+Revision History:
+
+      9-14-2025  Created by aubymori
+
+--*/
+void CNetPage::UpdateMenuBar()
+{
     HMENU hMenuOld = GetMenu(g_hMainWnd);
     HMENU hMenuNew = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MAINMENU_NET));
 
     AdjustMenuBar(hMenuNew);
 
-    CheckMenuItem(hMenuNew,IDM_BYTESSENT,g_Options.m_bAutoSize ? MF_CHECKED:MF_UNCHECKED);
-    CheckMenuItem(hMenuNew,IDM_BYTESSENT,g_Options.m_bGraphBytesSent ? MF_CHECKED:MF_UNCHECKED);
-    CheckMenuItem(hMenuNew,IDM_BYTESRECEIVED,g_Options.m_bGraphBytesReceived ? MF_CHECKED:MF_UNCHECKED);
-    CheckMenuItem(hMenuNew,IDM_BYTESTOTAL,g_Options.m_bGraphBytesTotal ? MF_CHECKED:MF_UNCHECKED);
+    CheckMenuItem(hMenuNew, IDM_BYTESSENT, g_Options.m_bAutoSize ? MF_CHECKED : MF_UNCHECKED);
+    CheckMenuItem(hMenuNew, IDM_BYTESSENT, g_Options.m_bGraphBytesSent ? MF_CHECKED : MF_UNCHECKED);
+    CheckMenuItem(hMenuNew, IDM_BYTESRECEIVED, g_Options.m_bGraphBytesReceived ? MF_CHECKED : MF_UNCHECKED);
+    CheckMenuItem(hMenuNew, IDM_BYTESTOTAL, g_Options.m_bGraphBytesTotal ? MF_CHECKED : MF_UNCHECKED);
 
     g_hMenu = hMenuNew;
     if (g_Options.m_fNoTitle == FALSE)
@@ -2655,10 +2679,6 @@ HRESULT CNetPage::Activate()
     {
         DestroyMenu(hMenuOld);
     }
-
-    SizeNetPage();
-
-    return S_OK;
 }
 
 

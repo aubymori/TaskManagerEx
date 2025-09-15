@@ -26,6 +26,10 @@ public:
     // Sent when page is being displayed
 
     virtual HRESULT     Activate()                                  PURE;
+
+    // Sent when we need to update the menu bar
+
+    virtual void        UpdateMenuBar()                             PURE;
     
     // Sent when page is being hidden
     
@@ -149,6 +153,7 @@ public:
     void    RestoreColumnOrder(HWND hwndList);
     void    PickColumns();
     HRESULT Activate();
+    void    UpdateMenuBar();
     void    Deactivate();
     void    DrawAdapterGraph(LPDRAWITEMSTRUCT lpdi, UINT iPane);
     void    SizeNetPage();    
@@ -251,6 +256,7 @@ public:
 
     HRESULT     Initialize(HWND hwndParent);
     HRESULT     Activate();
+    void        UpdateMenuBar();
     void        Deactivate();
     HRESULT     Destroy();
     void        GetTitle(LPTSTR pszText, size_t bufsize);
@@ -337,6 +343,7 @@ public:
 
     HRESULT     Initialize(HWND hwndParent);
     HRESULT     Activate();
+    void        UpdateMenuBar();
     void        Deactivate();
     HRESULT     Destroy();
     void        GetTitle(LPTSTR pszText, size_t bufsize);
@@ -495,6 +502,7 @@ public:
 
     HRESULT     Initialize(HWND hwndParent);
     HRESULT     Activate();
+    void        UpdateMenuBar();
     void        Deactivate();
     HRESULT     Destroy();
     void        GetTitle(LPTSTR pszText, size_t bufsize);
@@ -611,6 +619,7 @@ public:
 
     HRESULT     Initialize(HWND hwndParent);
     HRESULT     Activate();
+    void        UpdateMenuBar();
     void        Deactivate();
     HRESULT     Destroy();
     void        GetTitle(LPTSTR pszText, size_t bufsize);
