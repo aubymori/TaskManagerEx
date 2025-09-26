@@ -1,3 +1,6 @@
 [submodule "DefToLib"]
 	path = DefToLib
 	url = https://github.com/aubymori/DefToLib
+[submodule "MUIBuild"]
+	path = MUIBuild
+	url = https://github.com/aubymori/MUIBuild

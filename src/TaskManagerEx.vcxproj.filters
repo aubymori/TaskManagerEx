@@ -42,9 +42,6 @@
     <ClCompile Include="userpage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shundoc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="tokenutil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="taskmgr.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="taskmgr.en-US.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

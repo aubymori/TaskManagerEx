@@ -178,8 +178,25 @@
     <ClInclude Include="tokenutil.h" />
     <ClInclude Include="userdlgs.h" />
   </ItemGroup>
+  <Import Project="$(SolutionDir)MUIBuild\MUIBuild.targets" />
+  <PropertyGroup Label="MUI">
+    <_PrimaryLanguage>en-US</_PrimaryLanguage>
+    <_PrimaryLanguageID>0x0409</_PrimaryLanguageID>
+    <_RCConfig>taskmgr.rcconfig</_RCConfig>
+  </PropertyGroup>
+  <Target Name="MUI" AfterTargets="Link">
+  </Target>
   <ItemGroup>
+    <ResourceCompile Include="taskmgr.en-US.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ResourceCompile>
     <ResourceCompile Include="taskmgr.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="taskmgr.rcconfig" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(SolutionDir)DefToLib\DefToLib.targets" Condition="Exists('$(SolutionDir)DefToLib\DefToLib.targets')" />
