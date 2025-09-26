@@ -1,0 +1,11 @@
+LIBRARY ntdll.dll
+EXPORTS
+	NtInitiatePowerAction      ;argsize=16
+	NtShutdownSystem           ;argsize=4
+	NtQuerySystemInformation   ;argsize=16
+	NtOpenThread               ;argsize=16
+	NtClose                    ;argsize=4
+	RtlTimeToElapsedTimeFields ;argsize=8
+	RtlGetVersion              ;argsize=4
+	NtQueryInformationProcess  ;argsize=20
+	RtlNtStatusToDosError      ;argsize=4

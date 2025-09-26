@@ -29,6 +29,10 @@
 #define  _UNICODE
 #endif
 
+#ifndef WINNT
+#define WINNT
+#endif
+
 #define SECURITY_WIN32
 
 extern "C"

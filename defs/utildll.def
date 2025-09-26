@@ -1,0 +1,4 @@
+LIBRARY utildll.dll
+EXPORTS
+    CachedGetUserFromSid  ;argsize=12
+    CurrentDateTimeString ;argsize=4

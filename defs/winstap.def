@@ -1,0 +1,6 @@
+LIBRARY WINSTA.dll
+EXPORTS
+    WinStationGetProcessSid     ;argsize=20
+	WinStationConnectW          ;argsize=20
+	WinStationQueryInformationW ;argsize=24
+	WinStationShadow            ;argsize=20

@@ -161,7 +161,6 @@
     <ClCompile Include="procpage.cpp" />
     <ClCompile Include="ptrarray.cpp" />
     <ClCompile Include="rtlmir.cpp" />
-    <ClCompile Include="shundoc.cpp" />
     <ClCompile Include="taskpage.cpp" />
     <ClCompile Include="tokenutil.cpp" />
     <ClCompile Include="trayicon.cpp" />
@@ -183,6 +182,7 @@
     <ResourceCompile Include="taskmgr.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="DefToLib\DefToLib.targets" Condition="Exists('DefToLib\DefToLib.targets')" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>

@@ -1,0 +1,5 @@
+LIBRARY SHELL32.dll
+EXPORTS
+    RunFileDlg            @61  NONAME ;argsize=24
+    SHTestTokenPrivilegeW @236 NONAME ;argsize=8
+    SHGetUserDisplayName  @241 NONAME ;argsize=8

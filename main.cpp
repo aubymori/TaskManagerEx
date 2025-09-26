@@ -3019,10 +3019,6 @@ int WINAPI wWinMain(
     int cx;
     int cy;
 
-    // Load undocumented functions
-    if (!SHUndocInit())
-        return -1;
-
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
     g_hInstance = hInstance;

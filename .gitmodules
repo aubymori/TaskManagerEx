@@ -1,0 +1,3 @@
+[submodule "DefToLib"]
+	path = DefToLib
+	url = https://github.com/aubymori/DefToLib

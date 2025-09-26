@@ -27,14 +27,14 @@
 #define RFD_NOSHOWOPEN          0x00000008
 #define RFD_WOW_APP             0x00000010
 #define RFD_NOSEPMEMORY_BOX     0x00000020
-extern int (WINAPI *RunFileDlg)(HWND hwnd, HICON hIcon, LPCWSTR pszWorkingDir, LPCWSTR pszTitle,
+EXTERN_C int WINAPI RunFileDlg(HWND hwnd, HICON hIcon, LPCWSTR pszWorkingDir, LPCWSTR pszTitle,
 								LPCWSTR pszPrompt, DWORD dwFlags);
 
-extern BOOL (WINAPI *SHTestTokenPrivilegeW)(HANDLE hToken, LPCWSTR pszPrivilegeName);
+EXTERN_C BOOL WINAPI SHTestTokenPrivilegeW(HANDLE hToken, LPCWSTR pszPrivilegeName);
 
-extern HRESULT (WINAPI *SHGetUserDisplayName)(LPWSTR pszDisplayName, PULONG uLen);
+EXTERN_C HRESULT WINAPI SHGetUserDisplayName(LPWSTR pszDisplayName, PULONG uLen);
 
-extern NTSTATUS (NTAPI *NtInitiatePowerAction)(
+EXTERN_C NTSTATUS NTAPI NtInitiatePowerAction(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
     IN ULONG Flags,
@@ -386,7 +386,7 @@ typedef struct _PF_MEMORY_LIST_INFO
 } PF_MEMORY_LIST_INFO;
 
 
-extern NTSTATUS (NTAPI *NtQuerySystemInformation)(
+EXTERN_C NTSTATUS NTAPI NtQuerySystemInformation(
     IN SYSTEM_INFORMATION_CLASS SystemInformationClass,
     OUT PVOID SystemInformation,
     IN ULONG SystemInformationLength,
@@ -487,7 +487,7 @@ typedef struct _TIME_FIELDS
 } TIME_FIELDS;
 typedef TIME_FIELDS *PTIME_FIELDS;
 
-extern NTSTATUS (NTAPI *NtShutdownSystem)(
+EXTERN_C NTSTATUS NTAPI NtShutdownSystem(
     IN SHUTDOWN_ACTION Action
 );
 
@@ -510,21 +510,21 @@ typedef struct _OBJECT_ATTRIBUTES
   (p)->SecurityDescriptor = (s); \
   (p)->SecurityQualityOfService = NULL; \
 
-extern NTSTATUS (NTAPI *NtOpenThread)(
+EXTERN_C NTSTATUS NTAPI NtOpenThread(
     _Out_ PHANDLE            ThreadHandle,
     _In_  ACCESS_MASK        DesiredAccess,
     _In_  POBJECT_ATTRIBUTES ObjectAttributes,
     _In_  PCLIENT_ID         ClientId
 );
 
-extern NTSTATUS (NTAPI *NtClose)(
+EXTERN_C NTSTATUS NTAPI NtClose(
     _In_ HANDLE Handle
 );
 
 #define PASSWORD_LENGTH          14
 #define LOGONID_CURRENT     ((ULONG)-1)
 
-extern BOOLEAN (WINAPI *WinStationGetProcessSid)(
+EXTERN_C BOOLEAN WINAPI WinStationGetProcessSid(
     HANDLE   hServer,
     DWORD    ProcessId,
     FILETIME ProcessStartTime,
@@ -532,7 +532,7 @@ extern BOOLEAN (WINAPI *WinStationGetProcessSid)(
     DWORD *pdwSidSize
 );
 
-extern BOOLEAN (WINAPI *WinStationConnectW)(
+EXTERN_C BOOLEAN WINAPI WinStationConnectW(
     HANDLE hServer,
     ULONG LogonId,
     ULONG TargetLogonId,
@@ -770,7 +770,7 @@ typedef struct _PROCESS_BASIC_INFORMATION
     ULONG_PTR InheritedFromUniqueProcessId;
 } PROCESS_BASIC_INFORMATION;
 
-extern BOOLEAN (WINAPI *WinStationQueryInformationW)(
+EXTERN_C BOOLEAN WINAPI WinStationQueryInformationW(
     HANDLE hServer,
     ULONG LogonId,
     WINSTATIONINFOCLASS WinStationInformationClass,
@@ -779,7 +779,7 @@ extern BOOLEAN (WINAPI *WinStationQueryInformationW)(
     PULONG  pReturnLength
 );
 
-extern BOOLEAN (WINAPI *WinStationShadow)(
+EXTERN_C BOOLEAN WINAPI WinStationShadow(
     HANDLE hServer,
     PWSTR pTargetServerName,
     ULONG TargetLogonId,
@@ -787,12 +787,12 @@ extern BOOLEAN (WINAPI *WinStationShadow)(
     USHORT HotkeyModifiers
 );
 
-extern VOID (NTAPI *RtlTimeToElapsedTimeFields)(
+EXTERN_C VOID NTAPI RtlTimeToElapsedTimeFields(
     _In_  __int64 * Time,
     _Out_ PTIME_FIELDS TimeFields
 );
 
-extern NTSTATUS (NTAPI *RtlGetVersion)(PRTL_OSVERSIONINFOW lpVersionInformation);
+EXTERN_C NTSTATUS NTAPI RtlGetVersion(PRTL_OSVERSIONINFOW lpVersionInformation);
 
 typedef enum _PROCESSINFOCLASS
 {
@@ -844,7 +844,7 @@ typedef struct _SYSTEM_TIMEOFDAY_INFORMATION
 } SYSTEM_TIMEOFDAY_INFORMATION, *PSYSTEM_TIMEOFDAY_INFORMATION;
 
 
-extern NTSTATUS (NTAPI *NtQueryInformationProcess)(
+EXTERN_C NTSTATUS NTAPI NtQueryInformationProcess(
     IN HANDLE ProcessHandle,
     IN PROCESSINFOCLASS ProcessInformationClass,
     OUT PVOID ProcessInformation,
@@ -852,20 +852,18 @@ extern NTSTATUS (NTAPI *NtQueryInformationProcess)(
     OUT PULONG ReturnLength OPTIONAL
 );
 
-extern BOOL (WINAPI *EndTask)(HWND hWnd, BOOL fShutDown, BOOL fForce);
+EXTERN_C void WINAPI CachedGetUserFromSid(PSID pSid, PWCHAR pUserName, PULONG cbUserName);
 
-extern void (WINAPI *CachedGetUserFromSid)(PSID pSid, PWCHAR pUserName, PULONG cbUserName);
+EXTERN_C void WINAPI CurrentDateTimeString(LPWSTR pString);
 
-extern void (WINAPI *CurrentDateTimeString)(LPWSTR pString);
-
-extern ULONG (NTAPI *RtlNtStatusToDosError)(NTSTATUS Status);
+EXTERN_C ULONG NTAPI RtlNtStatusToDosError(NTSTATUS Status);
 
 #define GMI_DOCKSTATE           0x0000
 // Return values for SHGetMachineInfo(GMI_DOCKSTATE)
 #define GMID_NOTDOCKABLE         0  // Cannot be docked
 #define GMID_UNDOCKED            1  // Is undocked
 #define GMID_DOCKED              2  // Is docked
-extern DWORD_PTR (WINAPI *SHGetMachineInfo)(UINT gmi);
+EXTERN_C DWORD_PTR WINAPI SHGetMachineInfo(UINT gmi);
 
 //
 // Function loader
