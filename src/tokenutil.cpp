@@ -11,7 +11,7 @@
 //              2000-03-31  vtan        duplicated from ds to shell
 //  --------------------------------------------------------------------------
 
-#include <windows.h>
+#include "precomp.h"
 
 #include "TokenUtil.h"
 

@@ -48,6 +48,9 @@
     <ClCompile Include="rtlmir.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="precomp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="userdlgs.h">
@@ -85,5 +88,8 @@
     <ResourceCompile Include="taskmgr.en-US.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="taskmgr.rcconfig" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@
 //  History:    Oct-11-24   aubymori  Created
 //
 //--------------------------------------------------------------------------
+#include "precomp.h"
 #include "rtlmir.h"
 
 const DWORD dwNoMirrorBitmap = NOMIRRORBITMAP;
