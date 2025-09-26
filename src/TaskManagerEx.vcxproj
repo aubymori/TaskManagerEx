@@ -182,7 +182,7 @@
     <ResourceCompile Include="taskmgr.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <Import Project="DefToLib\DefToLib.targets" Condition="Exists('DefToLib\DefToLib.targets')" />
+  <Import Project="$(SolutionDir)DefToLib\DefToLib.targets" Condition="Exists('$(SolutionDir)DefToLib\DefToLib.targets')" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
