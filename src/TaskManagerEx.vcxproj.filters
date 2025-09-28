@@ -90,6 +90,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="taskmgr.rcconfig" />
+    <None Include="taskmgr.rcconfig">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
