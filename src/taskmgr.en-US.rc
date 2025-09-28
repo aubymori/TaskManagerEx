@@ -366,9 +366,9 @@ BEGIN
 END
 
 IDD_CUSTOM_INTERVAL DIALOGEX 50, 50, 184, 70
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_MODALFRAME | DS_SHELLFONT | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Set Custom Update Interval"
-FONT 8, "MS Shell Dlg 2"
+FONT 8, "MS Shell Dlg"
 BEGIN
     LTEXT           "Enter the amount of time in milliseconds that Task Manager should wait between updates.",
                     -1,7,6,170,19
@@ -531,7 +531,7 @@ BEGIN
             MENUITEM "&Physical Memory"             IDM_PHYSMEM
             MENUITEM "&Commit Charge"               IDM_COMMITTED
         END
-        MENUITEM "Show &LED Numbers",           IDM_LEDNUMBERS
+        MENUITEM "Show &LCD Numbers",           IDM_LEDNUMBERS
         MENUITEM "&Show Kernel Times",          IDM_KERNELTIMES
     END
     MENUITEM "Sh&ut Down"                       IDM_MENU_SHUTDOWN
@@ -774,7 +774,7 @@ BEGIN
     IDM_REFRESH             "Force Task Manager to update now, regardless of Update Speed setting"
     IDM_WHATSTHIS           "Provides access to point and click help"
     IDM_AFFINITY            "Controls which processors the process will be allowed to run on"
-    IDM_LEDNUMBERS          "Show LED numbers on the graphs, like Windows NT 4.0."
+    IDM_LEDNUMBERS          "Show LCD Numbers on the graphs, like Windows NT 4.0."
     IDM_KERNELTIMES         "Displays kernel time in the performance graphs"
     IDS_NOAFFINITYMASK      "The process must have affinity with at least one processor."
     IDS_INVALIDOPTION       "Invalid Option"
