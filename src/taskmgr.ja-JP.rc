@@ -198,7 +198,7 @@ BEGIN
                     WS_TABSTOP,103,136,87,10
     CONTROL         "I/O その他のバイト数",IDC_OTHERXFERCOUNT,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,103,147,87,10
-    CONTROL         "Command Line",IDC_COMMANDLINE,"Button",
+    CONTROL         "コマンド ライン",IDC_COMMANDLINE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,103,158,87,10
 END
 
@@ -367,10 +367,10 @@ END
 
 IDD_CUSTOM_INTERVAL DIALOGEX 50, 50, 184, 70
 STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-CAPTION "Set Custom Update Interval"
+CAPTION "更新間隔の設定"
 FONT 9, "MS UI Gothic"
 BEGIN
-    LTEXT           "Enter the amount of time in milliseconds that Task Manager should wait between updates.",
+    LTEXT           "タスク マネージャが更新するまでの待ち時間を、ミリ秒単位で入力してください。",
                     -1,7,6,170,19
     EDITTEXT        IDC_CUSTOM_INTERVAL_INPUT,58,30,68,12,ES_NUMBER
 
@@ -531,7 +531,7 @@ BEGIN
             MENUITEM "物理メモリ(&P)"             IDM_PHYSMEM
             MENUITEM "コミットチャージ(&C)"               IDM_COMMITTED
         END
-        MENUITEM "Show &LED Numbers",           IDM_LEDNUMBERS
+        MENUITEM "数字をLCD風で表示(&L)",           IDM_LEDNUMBERS
         MENUITEM "カーネル時間を表示する(&S)",          IDM_KERNELTIMES
     END
     MENUITEM "シャットダウン(&U)"                       IDM_MENU_SHUTDOWN
@@ -723,7 +723,7 @@ BEGIN
     IDM_BRINGTOFONT         "タスクを手前に表示しますが、フォーカスを切り替えません。"
     IDM_ALWAYSONTOP         "最小化されない限り、常にタスク マネージャがほかのすべてのウィンドウよりも手前に表示されます。"
     IDM_MINIMIZEONUSE       "[切り替え] 操作を実行すると、タスク マネージャが最小化されます。"
-    IDM_SHOWSHUTDOWN        "Show ""Shut Down"" in the menu bar"
+    IDM_SHOWSHUTDOWN        "メニュー バーに［シャットダウン］を表示します。"
     IDM_MINIMIZE            "選択したウィンドウ タスクを最小化します。"
     IDM_MAXIMIZE            "ウィンドウをデスクトップのサイズいっぱいに拡大します。"
     IDM_RESTORE             "選択したウィンドウを既定の大きさに戻します。"
@@ -752,14 +752,14 @@ BEGIN
     IDM_DETAILS             "各タスクの情報を表示します。"
     IDM_ALLCPUS             "1 つの履歴グラフで CPU 使用率の合計を表示します。"
     IDM_MULTIGRAPH          "CPU 使用率の履歴を CPU ごとにグラフで表示します。"
-    IDM_PHYSMEM             "The memory graph shows physical memory usage"
-    IDM_COMMITTED           "The memory graph shows both physical memory and page file usage"
+    IDM_PHYSMEM             "メモリ グラフは物理メモリの使用量を表示します。"
+    IDM_COMMITTED           "メモリ グラフは物理メモリとページ ファイルの使用量を表示します。"
     IDM_ABOUT               "プログラム情報、バージョン番号、著作権を表示します。"
     IDM_HIGH                "毎秒 2 回表示を更新します。"
     IDM_NORMAL              "2 秒に 1 回表示を更新します。"
     IDM_LOW                 "4 秒に 1 回表示を更新します。"
     IDM_PAUSED              "表示を自動的に更新しません。"
-    IDM_CUSTOM              "Set a custom update interval"
+    IDM_CUSTOM              "更新間隔をカスタマイズして設定します。"
     IDM_PROC_DEBUG          "このプロセスにデバッガを添付します。"
     IDM_PROC_TERMINATE      "システムからプロセスを削除します。"
     IDM_PROC_REALTIME       "プロセスをリアルタイム優先度クラスに設定します。"
@@ -774,7 +774,7 @@ BEGIN
     IDM_REFRESH             "[更新の頻度] の設定にかかわらず、今すぐタスク マネージャを更新します。"
     IDM_WHATSTHIS           "ヘルプを表示します。"
     IDM_AFFINITY            "どのプロセッサでプロセスを実行するかを制御します。"
-    IDM_LEDNUMBERS          "Show LED numbers on the graphs, like Windows NT 4.0."
+    IDM_LEDNUMBERS          "グラフ上の数字をLCD風で表示します（Windows NT 4.0のように）。"
     IDM_KERNELTIMES         "カーネル時間をパフォーマンス グラフ上に表示します。"
     IDS_NOAFFINITYMASK      "プロセスは、少なくとも 1 つのプロセッサと関係を持たなければなりません。"
     IDS_INVALIDOPTION       "無効なオプション"
@@ -914,7 +914,7 @@ BEGIN
     IDS_COL_READXFERCOUNT   "I/O 読み取りバイト数"
     IDS_COL_WRITEXFERCOUNT  "I/O 書き込みバイト数"
     IDS_COL_OTHERXFERCOUNT  "I/O その他のバイト数"
-    IDS_COL_COMMANDLINE     "Command Line"
+    IDS_COL_COMMANDLINE     "コマンド ライン"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -948,7 +948,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_FMTTASKS            "タスク: %d"
     IDS_FMTPROCS            "プロセス: %d"
-    IDS_FMTMEM              "Physical Memory: %d%%"
+    IDS_FMTMEM              "物理メモリ: %d%%"
     IDS_FMTMEMM             "%I64d / %I64d"
     IDS_FMTCPU              "CPU 使用率: %d%%"
     IDM_TASK_TILEVERT       "デスクトップ上でウィンドウを重ならないように左右に並べて表示します。"
